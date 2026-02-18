@@ -10,7 +10,9 @@
   },
   "dependencies": {
     "@fontsource-variable/space-grotesk": "^5.2.10",
+    "@fontsource-variable/ubuntu-sans-mono": "^5.2.10",
     "@fontsource/gloria-hallelujah": "^5.2.8",
-    "astro": "^5.17.1"
+    "astro": "^5.17.1",
+    "moment": "^2.30.1"
   }
 }

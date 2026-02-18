@@ -1,0 +1,48 @@
+@import "@fontsource-variable/space-grotesk";
+@import "@fontsource/gloria-hallelujah";
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Space Grotesk Variable', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+img {
+    width: 100%;
+}
+
+.heading {
+    font-family: 'Gloria Hallelujah'
+}
+
+p {
+    line-height: 1.5;
+}
+
+a.btn {
+    text-decoration: none;
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: bold;
+    gap: 0.5rem;
+
+    color: white;
+    background-color: crimson;
+
+    &:hover {
+        cursor: pointer;
+        opacity: 80%;
+        transform: scale(1.03);
+        transition: transform 75ms opacity 50ms ease-in-out;
+    }
+}
+
+h1 {
+    @media(width < 622px) {
+        font-size: 1.65rem;
+    }
+}

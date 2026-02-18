@@ -1,0 +1,36 @@
+<nav>
+    <ul class="nav-list">
+        <li><a href="/" class="heading">Home</a></li>
+        <li><a href="/posts" class="heading">Essays</a></li>
+    </ul>
+</nav>
+
+<style>
+    nav {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding-block: 1rem;
+    }
+
+    ul.nav-list {
+        display: flex;
+        flex-direction: row;
+        gap: 2.25rem;
+        list-style: none;
+
+        @media(width > 900px) {
+            gap: 4rem;
+        }
+    }
+
+    a {
+        text-decoration: none;
+        color: black;
+        font-size: 1.4rem;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+</style>

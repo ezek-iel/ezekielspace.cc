@@ -11,12 +11,18 @@ importers:
       '@fontsource-variable/space-grotesk':
         specifier: ^5.2.10
         version: 5.2.10
+      '@fontsource-variable/ubuntu-sans-mono':
+        specifier: ^5.2.10
+        version: 5.2.10
       '@fontsource/gloria-hallelujah':
         specifier: ^5.2.8
         version: 5.2.8
       astro:
         specifier: ^5.17.1
         version: 5.17.2(rollup@4.57.1)(typescript@5.9.3)
+      moment:
+        specifier: ^2.30.1
+        version: 2.30.1
 
 packages:
 
@@ -375,6 +381,9 @@ packages:
 
   '@fontsource-variable/space-grotesk@5.2.10':
     resolution: {integrity: sha512-yJQO/o35/hAP3CFnpdFTwQku2yzJOae2HIpBmqkOVoxhhXJaQP3g+b6Jrz7u+eI7A5ZdCIf88uMWpBJdFiGr5w==}
+
+  '@fontsource-variable/ubuntu-sans-mono@5.2.10':
+    resolution: {integrity: sha512-9oUR9qQPz0pyxb8GsbkiZwGj7ABsAtbgkkxcg0prOsvRk/nZhdfv23qpkG++T1Jo5DVQVfumRLBgPbNdmGT/1g==}
 
   '@fontsource/gloria-hallelujah@5.2.8':
     resolution: {integrity: sha512-GkIdkqC5eZbUX1jidQtoOdD7JAIq5pU5YzldX6uEcStNMrboXVnH1lafHJNLKrmufxEk7Tq3wg7hmI4kOlcJag==}
@@ -1224,6 +1233,9 @@ packages:
   micromark@4.0.2:
     resolution: {integrity: sha512-zpe98Q6kvavpCr1NPVSCMebCKfD7CA2NqZ+rykeNhONIJBpc1tFKt9hucLGwha3jNTNI8lHpctWJWoimVF4PfA==}
 
+  moment@2.30.1:
+    resolution: {integrity: sha512-uEmtNhbDOrWPFS+hdjFCBfy9f2YoyzRpwcl+DqpC6taX21FzsTLQVbMV/W7PzNSX6x/bhC1zA3c2UQ5NzH6how==}
+
   mrmime@2.0.1:
     resolution: {integrity: sha512-Y3wQdFg2Va6etvQ5I82yUhGdsKrcYox6p7FfL1LbK2J4V01F9TGlepTIhnK24t7koZibmg82KGglhA1XK5IsLQ==}
     engines: {node: '>=10'}
@@ -1911,6 +1923,8 @@ snapshots:
     optional: true
 
   '@fontsource-variable/space-grotesk@5.2.10': {}
+
+  '@fontsource-variable/ubuntu-sans-mono@5.2.10': {}
 
   '@fontsource/gloria-hallelujah@5.2.8': {}
 
@@ -2972,6 +2986,8 @@ snapshots:
       micromark-util-types: 2.0.2
     transitivePeerDependencies:
       - supports-color
+
+  moment@2.30.1: {}
 
   mrmime@2.0.1: {}
 

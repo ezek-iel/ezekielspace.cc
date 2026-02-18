@@ -1,0 +1,65 @@
+---
+import moment from "moment";
+import Base from "../layouts/base.astro";
+const allPosts = Object.values(
+    import.meta.glob("./essays/*.md", { eager: true }),
+);
+---
+
+<Base>
+    <div class="container">
+        <ul>
+            {
+                allPosts.map((post: any) => (
+                    <li>
+                        <article>
+                            <h3>{post.frontmatter.title}</h3>
+                            <p>
+                                {moment(post.frontmatter.date).format(
+                                    "MMM Do YYYY",
+                                )}
+                            </p>
+                            <a href={post.url} aria-label="link to post" />
+                        </article>
+                    </li>
+                ))
+            }
+        </ul>
+    </div>
+</Base>
+
+<style>
+
+    h3 {
+        text-decoration: none;
+    }
+    
+    article {
+        position: relative;
+
+        &:hover {
+            text-decoration: underline
+        }
+
+        & > a {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            inset: 0;
+        }
+    }
+
+    div {
+        max-width: 738px;
+        margin-inline: auto;
+        padding-inline: 2rem;
+        margin-top: 2.75rem;
+    }
+
+    ul {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 3rem;
+    }
+</style>
