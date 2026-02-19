@@ -1,0 +1,4 @@
+- Fix Footer Link 
+- Tags
+- Pinned Posts
+- Vercel Satori

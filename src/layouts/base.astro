@@ -1,6 +1,13 @@
 ---
 import "../styles/base.css";
 import Navbar from "../components/Navbar.astro";
+
+interface Props {
+    title: string;
+    url?: string
+}
+
+const { title, url } = Astro.props;
 ---
 
 <html lang="en">
@@ -10,7 +17,21 @@ import Navbar from "../components/Navbar.astro";
         <link rel="icon" href="/favicon.ico" />
         <meta name="viewport" content="width=device-width" />
         <meta name="generator" content={Astro.generator} />
-        <title>Astro</title>
+
+        <!-- Open Graph meta tags -->
+        <meta property="og:title" content={title} />
+        <meta
+            property="og:description"
+            content="Ezekiel is a software developer who lives in Lagos. He loves understanding how things works. You will most likely see him nerding out on documentaries, books or playing hard games"
+        />
+        <meta
+            property="og:image"
+            content="/og.png"
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content=`https://www.ezekielspace.cc/${url}` />
+
+        <title>{title}</title>
     </head>
     <body>
         <Navbar />

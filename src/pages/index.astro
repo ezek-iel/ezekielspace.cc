@@ -2,7 +2,7 @@
 import Base from "../layouts/base.astro";
 ---
 
-<Base>
+<Base title={"Ezekiel | Home"}>
 	<div class="container">
 		<div class="head-info">
 			<h1 class="heading">I'm Ezekiel</h1>
@@ -11,7 +11,7 @@ import Base from "../layouts/base.astro";
 			</p>
 		</div>
 		<p class="essay heading">
-			I make software and love understanding how things work. Aside from
+			I enjoy making software and love understanding how things work. <br> Aside from
 			coding, I enjoy playing games
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
@@ -60,7 +60,7 @@ import Base from "../layouts/base.astro";
 			>
 		</p>
 		<div class="actions">
-			<a href="" class="btn heading"
+			<a href="https://www.github.com/ezek-iel" class="btn heading"
 				>Github <svg
 					xmlns="http://www.w3.org/2000/svg"
 					width="24"
@@ -76,19 +76,22 @@ import Base from "../layouts/base.astro";
 					></path></svg
 				></a
 			>
-			<a href="" class="btn heading"
-				>Watch Videos <svg
-					xmlns="http://www.w3.org/2000/svg"
-					width="24"
-					height="24"
-					viewBox="0 0 24 24"
-					><path
+			<!-- 
+			
+			<a target="_blank" class="btn heading"
+			>Watch Videos <svg
+			xmlns="http://www.w3.org/2000/svg"
+			width="24"
+			height="24"
+			viewBox="0 0 24 24"
+			><path
 						fill="#fff"
 						d="M6 4v16a1 1 0 0 0 1.524.852l13-8a1 1 0 0 0 0-1.704l-13-8A1 1 0 0 0 6 4"
-					></path></svg
-				></a
-			>
-			<a href="" class="btn heading"
+						></path></svg
+						></a
+						>
+						-->
+			<a href="/posts" class="btn heading"
 				>Essays <svg
 					xmlns="http://www.w3.org/2000/svg"
 					width="24"
@@ -117,7 +120,7 @@ import Base from "../layouts/base.astro";
 		gap: 1.75rem;
 		align-items: start;
 
-		@media(width > 594px) {
+		@media (width > 594px) {
 			align-items: center;
 			flex-direction: row;
 		}
@@ -138,6 +141,7 @@ import Base from "../layouts/base.astro";
 		display: flex;
 		flex-direction: column;
 		padding-block-start: 8rem;
+		padding-block-end: 4rem;
 		padding-inline: 2rem;
 		gap: 3rem;
 	}
