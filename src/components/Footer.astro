@@ -1,8 +1,16 @@
+---
+interface Props {
+    postName?: string;
+}
+
+const { postName } = Astro.props;
+---
+
 <footer>
     <h2>Found a mistake?</h2>
     <p>Every post is a markdown file. So contributing is very easy</p>
     <a
-        href="https://github.com/ezek-iel/ezekielspace.cc/blobs/main/src/pages/posts"
+        href=`https://github.com/ezek-iel/ezekielspace.cc/blob/main/src/pages${postName}.md`
         class="btn"
         target="_blank"
         >Edit on Github <svg

@@ -4,21 +4,26 @@ import "../styles/markdown-override.css";
 import Footer from "../components/Footer.astro";
 import moment from "moment";
 
-
 const { frontmatter } = Astro.props;
 ---
 
-<Base>
+<Base
+    title={frontmatter.title}
+    url={(frontmatter.url as string).replace("/essays", "posts")}
+>
     <div class="markdown-container">
         <div class="title">
             <h1>{frontmatter.title}</h1>
-            <p class="info">Written on <span class="date">{moment(frontmatter.date).format("MMM Do YYYY")}
-                </span> by {frontmatter.author}</p>
+            <p class="info">
+                Written on <span class="date"
+                    >{moment(frontmatter.date).format("MMM Do YYYY")}
+                </span> by {frontmatter.author}
+            </p>
         </div>
 
         <slot />
         <div class="footer-container">
-            <Footer/>
+            <Footer postName={frontmatter.url} />
         </div>
     </div>
 </Base>
@@ -34,7 +39,7 @@ const { frontmatter } = Astro.props;
         flex-direction: column;
         gap: 0.75rem;
     }
-    
+
     span.date {
         font-weight: bold;
     }
