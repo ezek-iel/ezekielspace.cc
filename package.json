@@ -13,6 +13,9 @@
     "@fontsource-variable/ubuntu-sans-mono": "^5.2.10",
     "@fontsource/gloria-hallelujah": "^5.2.8",
     "astro": "^5.17.1",
-    "moment": "^2.30.1"
+    "gray-matter": "^4.0.3",
+    "moment": "^2.30.1",
+    "satori": "^0.19.2",
+    "sharp": "^0.34.5"
   }
 }
