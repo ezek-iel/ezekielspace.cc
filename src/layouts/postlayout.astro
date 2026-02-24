@@ -8,6 +8,8 @@ const { frontmatter } = Astro.props;
 ---
 
 <Base
+    description={frontmatter.description ||
+        "Ezekiel is a software developer who lives in Lagos. He loves understanding how things works. You will most likely see him nerding out on documentaries, books or playing hard games"}
     title={frontmatter.title}
     url={(frontmatter.url as string).replace("/essays", "posts")}
 >
@@ -19,6 +21,9 @@ const { frontmatter } = Astro.props;
                     >{moment(frontmatter.date).format("MMM Do YYYY")}
                 </span> by {frontmatter.author}
             </p>
+            <ul class="tags">
+                {frontmatter.tags.map((tag: string) => <li># {tag}</li>)}
+            </ul>
         </div>
 
         <slot />
@@ -46,5 +51,26 @@ const { frontmatter } = Astro.props;
 
     .info {
         font-size: 1.15rem;
+    }
+
+    .tags {
+        list-style: none;
+        flex-wrap: wrap;
+        display: inline;
+        margin-top: 1rem;
+    }
+
+    .tags li {
+        display: inline;
+        background-color: crimson;
+        padding-block: 0.5rem;
+        padding-inline: 1rem;
+        border-radius: 1rem;
+        font-size: 0.9rem;
+        color: white;
+
+        &:not(:last-child) {
+            margin-right: 0.5rem;
+        }
     }
 </style>

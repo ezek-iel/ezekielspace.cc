@@ -4,10 +4,11 @@ import Navbar from "../components/Navbar.astro";
 
 interface Props {
     title: string;
-    url?: string
+    url?: string;
+    description: string;
 }
 
-const { title, url = "" } = Astro.props;
+const { title, url = "", description } = Astro.props;
 ---
 
 <html lang="en">
@@ -22,7 +23,7 @@ const { title, url = "" } = Astro.props;
         <meta property="og:title" content={title} />
         <meta
             property="og:description"
-            content="Ezekiel is a software developer who lives in Lagos. He loves understanding how things works. You will most likely see him nerding out on documentaries, books or playing hard games"
+            content = {description}
         />
         <meta
             property="og:image"

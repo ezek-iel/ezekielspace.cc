@@ -38,6 +38,13 @@ p, li {
 blockquote {
     border-left: .375rem solid black;
     padding-inline-start: 0.75rem;
+    color: #212430;
+    background-color: #EEEEEE
+}
+
+code, code span {
+    font-family: "Ubuntu Sans Mono Variable", monospace;
+
 }
 
 pre {
@@ -47,6 +54,9 @@ pre {
     scrollbar-width: thin;
 }
 
-code, code  span {
-    font-family: "Ubuntu Sans Mono Variable", monospace;
+P code {
+    background-color: #FFEBEE;
+    padding-inline: 0.5rem;
+    padding-block: 0.1rem;
+    border-radius: .25rem;
 }

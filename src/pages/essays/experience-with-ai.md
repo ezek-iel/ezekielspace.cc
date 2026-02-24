@@ -2,6 +2,7 @@
 title: "My Experience with AI"
 author: "Ezekiel"
 date: 2026-02-21
+tags: ["Future", "Software"]
 layout: "../../layouts/postlayout.astro"
 ---
 ## AI is a multiplier 

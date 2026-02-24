@@ -6,7 +6,11 @@ const allPosts = Object.values(
 );
 ---
 
-<Base title="Ezekiel | Essays" url="posts">
+<Base
+    title="Ezekiel | Essays"
+    url="posts"
+    description={"All essays from ezekiel. Ezekiel is a software developer who lives in Lagos. He loves understanding how things works. You will most likely see him nerding out on documentaries, books or playing hard games"}
+>
     <div class="container">
         <ul>
             {
@@ -29,16 +33,15 @@ const allPosts = Object.values(
 </Base>
 
 <style>
-
     h3 {
         text-decoration: none;
     }
-    
+
     article {
         position: relative;
 
         &:hover {
-            text-decoration: underline
+            text-decoration: underline;
         }
 
         & > a {
