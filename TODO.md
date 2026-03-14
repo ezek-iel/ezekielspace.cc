@@ -1,4 +1,3 @@
-- Fix Footer Link 
-- Tags
+- Filter by Tags
+- Sort Post
 - Pinned Posts
-- Vercel Satori
