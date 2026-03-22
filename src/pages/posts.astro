@@ -1,8 +1,16 @@
 ---
 import moment from "moment";
 import Base from "../layouts/base.astro";
-const allPosts = Object.values(
+import type { Post } from "../types";
+
+const allPosts: Post[] = Object.values(
     import.meta.glob("./essays/*.md", { eager: true }),
+);
+
+const allPostsDescending = allPosts.sort(
+    (postA, postB) =>
+        new Date(postB.frontmatter.date).getTime() -
+        new Date(postA.frontmatter.date).getTime(),
 );
 ---
 
@@ -14,13 +22,16 @@ const allPosts = Object.values(
     <div class="container">
         <ul>
             {
-                allPosts.map((post: any) => (
+                allPostsDescending.map((post) => (
                     <li>
                         <article>
                             <h3>{post.frontmatter.title}</h3>
-                            <p>
+                            <p class="description">
+                                {post.frontmatter.description}
+                            </p>
+                            <p class="date">
                                 {moment(post.frontmatter.date).format(
-                                    "MMM Do YYYY",
+                                    "Do MMMM YYYY",
                                 )}
                             </p>
                             <a href={post.url} aria-label="link to post" />
@@ -50,6 +61,11 @@ const allPosts = Object.values(
             height: 100%;
             inset: 0;
         }
+
+        .date {
+            font-size: 0.75rem;
+            margin-top: 0.75rem;
+        }
     }
 
     div {
@@ -64,5 +80,9 @@ const allPosts = Object.values(
         display: flex;
         flex-direction: column;
         gap: 3rem;
+    }
+
+    .container {
+        padding-block: 4rem;
     }
 </style>

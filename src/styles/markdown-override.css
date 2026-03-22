@@ -87,6 +87,10 @@ P code {
         font-size: 5rem;
     }
 
+    a {
+        color: black;
+    }
+
     img {
         width: initial;
         height: 270px;

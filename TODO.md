@@ -1,3 +1,3 @@
+- Pinned Posts on home page
 - Filter by Tags
-- Sort Post
-- Pinned Posts
+- list item inside
