@@ -1,3 +1,2 @@
-- Pinned Posts on home page
 - Filter by Tags
-- list item inside
+- list-item-inside

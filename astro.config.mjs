@@ -85,7 +85,7 @@ export default defineConfig({
             const pngBuffer = await sharp(Buffer.from(svg)).png().toBuffer();
 
             // 5. Write to the dist folder (Astro's build output)
-            const resultDirectory = path.join(fileURLToPath(dir), 'og')
+            const resultDirectory = path.join(fileURLToPath(dir), 'og-bg')
             const outputPath = path.join(resultDirectory, `${slug}.png`);
             await fs.mkdir(path.dirname(outputPath), { recursive: true });
             await fs.writeFile(outputPath, pngBuffer);
