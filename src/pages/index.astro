@@ -8,11 +8,18 @@ import PinnedPosts from "../components/PinnedPosts.astro";
 	description={"Ezekiel is a software developer who lives in Lagos. He loves understanding how things works. You will most likely see him nerding out on documentaries, books or playing hard games"}
 >
 	<div class="container">
-		<div class="head-info">
-			<h1 class="heading">I'm Ezekiel</h1>
-			<p class="heading subtitle">
-				Software Engineer from Lagos, Nigeria.
-			</p>
+		<div class="profile">
+			<img
+				src="/profile-pic.png"
+				alt="Ezekiel's Profile Picture Image"
+				class="profile-picture"
+			/>
+			<div class="head-info">
+				<h1 class="heading">I'm Ezekiel</h1>
+				<p class="heading subtitle">
+					Software Engineer from Lagos, Nigeria.
+				</p>
+			</div>
 		</div>
 		<p class="essay heading">
 			I enjoy making software and love understanding how things work. <br
@@ -115,7 +122,7 @@ import PinnedPosts from "../components/PinnedPosts.astro";
 			>
 		</div>
 		<p class="essay heading">
-			<PinnedPosts/>
+			<PinnedPosts />
 		</p>
 	</div>
 </Base>
@@ -136,6 +143,25 @@ import PinnedPosts from "../components/PinnedPosts.astro";
 		display: flex;
 		flex-direction: column;
 		gap: 0.125rem;
+	}
+
+	.profile {
+		display: flex;
+		flex-direction: column;
+		align-items: start;
+		margin-bottom: 1.75rem;
+		
+		@media (width > 738px)  {
+			flex-direction: row;
+			align-items: center;
+			gap: 1rem;
+		}
+	}
+
+	.profile-picture {
+		border-radius: 100%;
+		height: 256px;
+		width: 256px;
 	}
 
 	p.essay {
