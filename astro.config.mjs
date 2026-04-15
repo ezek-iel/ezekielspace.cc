@@ -23,7 +23,7 @@ export default defineConfig({
           // 1. Load a font (Satori requires an ArrayBuffer font)
           const fontData = await fs.readFile('./node_modules/@fontsource/gloria-hallelujah/files/gloria-hallelujah-latin-400-normal.woff');
           // Load background image as base64 to avoid URL issues
-          const bgBuffer = await fs.readFile(path.resolve('./public/og.png'));
+          const bgBuffer = await fs.readFile(path.resolve('./public/og-bg.png'));
           const bgBase64 = `data:image/png;base64,${bgBuffer.toString('base64')}`;
 
           for (const file of files) {

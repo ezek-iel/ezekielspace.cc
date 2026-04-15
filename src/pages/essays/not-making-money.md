@@ -5,7 +5,6 @@ author: "Ezekiel"
 date: 2026-02-19
 layout: "../../layouts/postlayout.astro"
 tags: ["Life", "Software"]
-pinned: true
 ---
 I think as a species and as a profession we have entered this stage where everything we do is for the ultimate purpose of making money.
 
