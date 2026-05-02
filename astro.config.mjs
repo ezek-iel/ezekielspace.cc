@@ -66,7 +66,7 @@ export default defineConfig({
                     {
                       type: 'h3',
                       props: {
-                        style: {fontSize: '51px', fontWeight: 'bold'},
+                        style: { fontSize: '51px', fontWeight: 'bold' },
                         children: "by Ezekiel"
                       }
                     }
@@ -85,7 +85,7 @@ export default defineConfig({
             const pngBuffer = await sharp(Buffer.from(svg)).png().toBuffer();
 
             // 5. Write to the dist folder (Astro's build output)
-            const resultDirectory = path.join(fileURLToPath(dir), 'og-bg')
+            const resultDirectory = path.join(fileURLToPath(dir), 'og')
             const outputPath = path.join(resultDirectory, `${slug}.png`);
             await fs.mkdir(path.dirname(outputPath), { recursive: true });
             await fs.writeFile(outputPath, pngBuffer);
