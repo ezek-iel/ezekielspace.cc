@@ -120,6 +120,35 @@ import PinnedPosts from "../components/PinnedPosts.astro";
 					></svg
 				></a
 			>
+			<a href="https://bsky.app/profile/ezekielspace.cc" target="_blank" class="btn heading"
+				>Bluesky
+				<svg
+					width="24"
+					height="24"
+					viewBox="0 0 24 24"
+					fill="none"
+					xmlns="http://www.w3.org/2000/svg"
+				>
+					<defs>
+						<clipPath id="clip_path_1">
+							<rect width="24" height="24"></rect>
+						</clipPath>
+					</defs>
+					<g clip-path="url(#clip_path_1)">
+						<path
+							d="M0 0L24 0L24 24L0 24L0 0Z"
+							transform="scale(1 1)"></path>
+						<path
+							d="M4.335 1.14424C2.681 -0.0547657 0 -0.982767 0 1.97024C0 2.56024 0.35 6.92324 0.556 7.63124C1.269 10.0942 3.686 10.3812 6 10.0002C1.955 10.6652 1.111 13.2083 3.333 15.4103C4.363 16.4283 5.246 17.0003 6 17.0003C8 17.0003 9.134 14.2313 9.5 13.5003C9.83333 12.8336 10 12.3336 10 12.0003C10 12.3336 10.1667 12.8336 10.5 13.5003C10.866 14.2313 12 17.0003 14 17.0003C14.754 17.0003 15.637 16.4293 16.667 15.4103C18.889 13.2073 18.045 10.6642 14 10.0002C16.314 10.3802 18.73 10.0942 19.444 7.63125C19.65 6.92324 20 2.55924 20 1.97024C20 -0.982766 17.32 -0.054765 15.665 1.14424C13.372 2.80624 10.905 6.19224 10 8.00025C9.095 6.19224 6.628 2.80624 4.335 1.14424"
+							fill="none"
+							stroke-width="2"
+							stroke="#FFFFFF"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							transform="translate(2 4)"></path>
+					</g>
+				</svg></a
+			>
 		</div>
 		<p class="essay heading">
 			<PinnedPosts />
@@ -150,8 +179,8 @@ import PinnedPosts from "../components/PinnedPosts.astro";
 		flex-direction: column;
 		align-items: start;
 		margin-bottom: 1.75rem;
-		
-		@media (width > 738px)  {
+
+		@media (width > 738px) {
 			flex-direction: row;
 			align-items: center;
 			gap: 1rem;
