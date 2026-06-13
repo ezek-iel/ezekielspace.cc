@@ -7,7 +7,7 @@ layout: "../../layouts/postlayout.astro"
 ---
 ## AI is a multiplier 
 
-I once attended an interview sometime ago. I was given the change to ask the interviewers some questions. The first question I asked was; 'AI has been here for 2 years now, how has it really impacted your workflows?'
+I once attended an interview sometime ago. I was given the chance to ask the interviewers some questions. The first question I asked was; 'AI has been here for 2 years now, how has it really impacted your workflows?'
 
 The first reply he gave was that AI is a productivity tool. Productivity tools are nx multipliers.
 
