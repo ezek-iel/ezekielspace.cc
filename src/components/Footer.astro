@@ -35,6 +35,10 @@ const { postName } = Astro.props;
         border: 2px solid black;
         padding: 1.5rem;
         border-radius: 0.75rem;
+
+        @media (prefers-color-scheme: dark) {
+            border-color: white;
+        }
     }
 
     p {

@@ -42,3 +42,18 @@ h1 {
         font-size: 1.65rem;
     }
 }
+
+a {
+    color: black
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #161616;
+        color: white
+    }
+
+    a {
+        color: white;
+    }
+}
