@@ -10,8 +10,8 @@ const { frontmatter } = Astro.props;
 <Base
     description={frontmatter.description ||
         "Ezekiel is a software developer who lives in Lagos. He loves understanding how things works. You will most likely see him nerding out on documentaries, books or playing hard games"}
-    title={frontmatter.title}
-    url={(frontmatter.url as string).replace("/essays", "posts")}
+    title={`${frontmatter.title} - Ezekiel`}
+    url={(frontmatter.url as string).replace("/essays", "essays")}
     ogImage={`/og${(frontmatter.url as string).replace("/essays", "")}.png`}
 >
     <div class="markdown-container">

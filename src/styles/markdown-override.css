@@ -36,7 +36,7 @@
     h2,
     h3,
     h4 {
-        font-family: 'Space Grotesk';
+        font-family: 'Space Grotesk Variable';
         text-decoration: underline;
         font-weight: bold;
     }
@@ -70,7 +70,13 @@ blockquote {
     border-left: .375rem solid black;
     padding-inline-start: 0.75rem;
     color: #212430;
-    background-color: #EEEEEE
+    background-color: #EEEEEE;
+
+    @media (prefers-color-scheme: dark) {
+        background-color: #212430;
+        color: #EEEEEE;
+        border-left-color: white;
+    }
 }
 
 code,
@@ -86,11 +92,15 @@ pre {
     scrollbar-width: thin;
 }
 
-P code {
+p code {
     background-color: #FFEBEE;
     padding-inline: 0.5rem;
     padding-block: 0.1rem;
     border-radius: .25rem;
+
+    @media screen and (prefers-color-scheme: dark) {
+        background-color: #212121;
+    }
 }
 
 

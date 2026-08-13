@@ -1,5 +1,6 @@
 @import "@fontsource-variable/space-grotesk";
 @import "@fontsource/gloria-hallelujah";
+@import "@fontsource-variable/ubuntu-sans-mono";
 
 * {
     box-sizing: border-box;
@@ -55,5 +56,17 @@ a {
 
     a {
         color: white;
+    }
+}
+
+.mono {
+    font-family: 'Ubuntu Sans Mono Variable', monospace;
+    background: #FEFEFE;
+    padding-inline: 0.5rem;
+    padding-block: 0.25rem;
+    border-radius: 0.25rem;
+
+    @media screen and (prefers-color-scheme: dark) {
+        background: #212121;
     }
 }

@@ -9,6 +9,7 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/sitemap": "^3.7.3",
     "@fontsource-variable/space-grotesk": "^5.2.10",
     "@fontsource-variable/ubuntu-sans-mono": "^5.2.10",
     "@fontsource/gloria-hallelujah": "^5.2.8",

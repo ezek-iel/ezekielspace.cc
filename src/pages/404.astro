@@ -1,0 +1,91 @@
+---
+import Base from "../layouts/base.astro";
+---
+
+<Base
+    title="Not Found"
+    description="The page you are looking for cannot be found"
+    url=""
+>
+    <div class="container">
+        <div>
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="1em"
+                height="1em"
+                viewBox="0 0 24 24"
+                class="icon"
+            >
+                <path d="M0 0h24v24H0z" fill="none"></path>
+                <g
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-width="1.5"
+                >
+                    <path
+                        d="M17 15v2m.009 2H17m5-2a5 5 0 1 1-10 0a5 5 0 0 1 10 0Zm-7.616-7.563a3.5 3.5 0 0 0-4.947 4.947"
+                    ></path>
+                    <path
+                        d="M9.78 20.436c-.446-.446-.592-.58-.874-.697c-.285-.119-.58-.123-1.214-.123c-1.508 0-2.371 0-2.84-.468s-.468-1.332-.468-2.84c0-.63-.004-.926-.121-1.21s-.323-.496-.771-.944C2.928 13.59 2 12.886 2 12s.928-1.59 1.492-2.154c.446-.446.652-.658.77-.94c.118-.285.122-.58.122-1.214c0-1.508 0-2.371.468-2.84s1.332-.468 2.84-.468c.629 0 .925-.004 1.207-.12c.286-.117.498-.323.947-.772C10.41 2.928 11.21 2 12 2s1.59.928 2.154 1.492c.449.448.662.654.946.772c.283.116.579.12 1.208.12c1.508 0 2.371 0 2.84.468s.468 1.332.468 2.84c0 .632.004.928.122 1.211s.251.418.698.865"
+                    ></path>
+                </g>
+            </svg>
+        </div>
+        <h1 class="heading">
+            The page you're looking for is ... <span class="mono"
+                >undefined</span>
+        </h1>
+        <p>
+            We tried to <span class="mono">fetch()</span> it, but got a 404 response.
+        </p>
+        <p>
+            Maybe try <span class="mono"> git checkout </span> back to safety?
+        </p>
+        <a class="btn" href="/"
+            >Go Home <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="1em"
+                height="1em"
+                viewBox="0 0 24 24"
+            >
+                <path d="M0 0h24v24H0z" fill="none"></path>
+                <g
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                >
+                    <path
+                        d="M5 12H3l9-9l9 9h-2M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"
+                    ></path>
+                    <path d="M9 21v-6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v6"></path>
+                </g>
+            </svg>
+        </a>
+    </div>
+</Base>
+
+<style>
+    h1 {
+        font-size: 1.75rem;
+        max-width: 80%;
+        font-weight: normal;
+    }
+
+    .container {
+        margin-inline: auto;
+        padding-block: 10rem;
+
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        align-items: center;
+    }
+
+    .icon {
+        width: 4.5rem;
+        height: 4.5rem;
+    }
+</style>

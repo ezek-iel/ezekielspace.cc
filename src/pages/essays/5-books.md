@@ -4,7 +4,7 @@ author: "Ezekiel"
 date: 2026-03-10
 tags: ["Personal"]
 layout: "../../layouts/postlayout.astro"
-description: "As a programmer, a christain and a guy getting is life together, I've read a lot of books, finished some and applied few."
+description: "As a programmer, a christian and a guy getting his life together, I've read a lot of books, finished some and applied few."
 ---
 <div class="booktitle-container">
     <img src="https://th.bing.com/th/id/OIP.M5Sk7HCN-jnTsGZXXeuxVgHaL0?o=7rm=3&rs=1&pid=ImgDetMain&o=7&rm=3">
