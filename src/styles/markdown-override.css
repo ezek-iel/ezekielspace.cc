@@ -15,8 +15,11 @@
         margin-top: 5rem;
     }
 
-    .title, .footer-container {
-        h1, h2 {
+    .title,
+    .footer-container {
+
+        h1,
+        h2 {
             font-family: 'Gloria Hallelujah';
             text-decoration: underline;
             font-weight: bold;
@@ -49,6 +52,22 @@
             color: white;
         }
     }
+
+
+    a[data-footnote-ref],
+    a[data-footnote-backref] {
+        color: crimson;
+
+        &:hover {
+            opacity: 70%;
+        }
+    }
+
+    sup a.footnote-highlight {
+        background-color: #fef96350;
+        transition: background 0.3s;
+        padding-inline: 0.25rem;
+    }
 }
 
 ul,
@@ -59,7 +78,6 @@ ol {
     flex-direction: column;
     gap: 2rem;
 }
-
 
 p,
 li {
@@ -92,7 +110,9 @@ pre {
     scrollbar-width: thin;
 }
 
-p code {
+p code,
+ul code,
+ol code {
     background-color: #FFEBEE;
     padding-inline: 0.5rem;
     padding-block: 0.1rem;
@@ -103,7 +123,17 @@ p code {
     }
 }
 
+section.footnotes ol {
+    gap: 1.25rem;
+}
 
+section.footnotes li.footnote-highlight {
+    background-color: #fef96320;
+}
+
+section.footnotes li p {
+    font-size: 1rem;
+}
 
 /*! Styles for specific posts */
 

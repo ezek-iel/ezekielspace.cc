@@ -32,6 +32,44 @@ const { frontmatter } = Astro.props;
             <Footer postName={frontmatter.url} />
         </div>
     </div>
+
+    <script>
+        function initFootnotes() {
+            const links = document.querySelectorAll(
+                "a[data-footnote-backref],[data-footnote-ref]",
+            );
+            links.forEach((link) => {
+                link.addEventListener("click", (e) => {
+                    const targetId = link.getAttribute("href");
+                    if (!targetId) return;
+                    const targetEl = document.querySelector(targetId);
+
+                    if (targetEl) {
+                        e.preventDefault();
+
+                        // 🧹 1. Remove highlight from ANY previously highlighted element
+                        document
+                            .querySelectorAll(".footnote-highlight")
+                            .forEach((el) => {
+                                el.classList.remove("footnote-highlight");
+                            });
+
+                        targetEl.classList.add("footnote-highlight");
+
+                        targetEl.scrollIntoView({
+                            behavior: "smooth",
+                            block: "center",
+                        });
+
+                        history.pushState(null, "", targetId);
+                    }
+                });
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", initFootnotes);
+        document.addEventListener("astro:page-load", initFootnotes);
+    </script>
 </Base>
 
 <style>
