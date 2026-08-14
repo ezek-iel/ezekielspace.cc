@@ -25,7 +25,7 @@ I decided to do something about it. or...,
 I am no SEO professional so I delegated this one to AI, and besides,  
 AI has gotten really good now, so it shouldn't really be an issue for it (_i mean us_).
 
-In the terminal, l installed pi (_minimal agent harness_), and connected it to thez Deepseek API (_which I paid for_).
+In the terminal, l installed pi (_minimal agent harness_), and connected it to the Deepseek API (_which I paid for_).
 
 I have been hearing about skills all around me, in my emails, BlueSky, YouTube and GitHub explore pages. So, i decided to try it out.
 
