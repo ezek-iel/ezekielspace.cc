@@ -5,6 +5,7 @@ date: 2026-02-21
 tags: ["Future", "Software"]
 layout: "../../layouts/postlayout.astro"
 description: "How AI has changed my workflow as a developer — a multiplier, not a crutch."
+visible: true
 ---
 ## AI is a multiplier 
 

@@ -8,7 +8,7 @@ const allPosts: Post[] = Object.values(
 const pinnedPosts = allPosts.filter((post) => post.frontmatter.pinned);
 ---
 
-<div class="container">
+<div class="inner-container">
     <h2>You'll most likely want to read...</h2>
 
     <ul>
@@ -52,7 +52,7 @@ const pinnedPosts = allPosts.filter((post) => post.frontmatter.pinned);
         }
     }
 
-    .container {
+    .inner-container {
         border: 2px solid;
         padding: 2rem;
         border-radius: 1rem;

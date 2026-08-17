@@ -70,3 +70,14 @@ a {
         background: #212121;
     }
 }
+
+div.container {
+		max-width: 738px;
+		margin-inline: auto;
+		display: flex;
+		flex-direction: column;
+		padding-block-start: 2rem;
+		padding-block-end: 4rem;
+		padding-inline: 2rem;
+		gap: 3rem;
+	}

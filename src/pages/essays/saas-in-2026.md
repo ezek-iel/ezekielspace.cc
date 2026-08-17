@@ -5,6 +5,7 @@ date: 2026-03-22
 tags: ["Technology"]
 layout: "../../layouts/postlayout.astro"
 description: "Some things still matter when producing good slop-ware products"
+visible: true
 ---
 
 Welcome to 2026. Coding agents are getting better. Software products are easier to create than ever before. 

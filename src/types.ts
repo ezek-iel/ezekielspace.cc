@@ -6,6 +6,7 @@
     layout: string
     description: string
     pinned: boolean;
+    visible: boolean;
 }
 
 export interface Post {

@@ -5,6 +5,7 @@ date: 2026-02-26
 tags: ["Software", "Future"]
 description: "AI is here to stay. How can we make the best of it as developers?"
 layout: "../../layouts/postlayout.astro"
+visible: true
 ---
 
 > This post will stay updated as AI evolves 😅
@@ -19,7 +20,7 @@ Since it's here. we should make the best of it.
 
 ## Vibe coding or AI-assisted coding?
 
-Vibe coding is allowing AI to do all the work.[^1] You have no idea what your coding agent is doing; it iterates until it meets the requirements.
+Vibe coding is allowing AI to do all the work. You have no idea what your coding agent is doing; it iterates until it meets the requirements.
 
 AI assisted coding is AI coding with a human twist. You have a knowledge of what AI is doing, why it's doing it and how it's doing it.
 
@@ -80,5 +81,3 @@ Feel free to mail me about how AI has helped you, including any objections you h
 Or dm me if you can
 
 I am working on creating a free YouTube course on building complex multi-step agents. I've been on it for months now. I will be joyful to share it with you guys once it's out.
-
-[^1]: This is a footnote text

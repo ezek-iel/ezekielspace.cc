@@ -5,6 +5,7 @@ date: 2026-08-13
 tags: ["Technology", "AI", "Marketing", "SEO"]
 layout: "../../layouts/postlayout.astro"
 description: "Writing into the void isn't fun"
+visible: true
 ---
 
 Something I really dislike doing when building new websites is __SEO__. It sounds more like marketing stuff than actual technology.

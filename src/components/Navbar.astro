@@ -1,7 +1,89 @@
 <nav>
     <ul class="nav-list">
-        <li><a href="/" class="heading">Home</a></li>
-        <li><a href="/posts" class="heading">Essays</a></li>
+        <li>
+            <a href="/" class="">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                >
+                    <path d="M0 0h24v24H0z" fill="none"></path>
+                    <g
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                    >
+                        <path
+                            d="M5 12H3l9-9l9 9h-2M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"
+                        ></path>
+                        <path d="M9 21v-6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v6"
+                        ></path>
+                    </g>
+                </svg>
+                Home</a
+            >
+        </li>
+        <li>
+            <a href="/posts" class="">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                >
+                    <path d="M0 0h24v24H0z" fill="none"></path>
+                    <path
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M4 20h4L18.5 9.5a2.828 2.828 0 1 0-4-4L4 16zm9.5-13.5l4 4M19 16l-2 3h4l-2 3"
+                    ></path>
+                </svg>Essays</a
+            >
+        </li>
+        <li>
+            <a href="/ai" class=""
+                ><svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                >
+                    <path d="M0 0h24v24H0z" fill="none"></path>
+                    <path
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M8 4h8a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2m-4 0H8a2 2 0 0 1-2-2V6m6-4v2m-3 8v9m6-6v6M5 16l4-2m0 4h6M14 8v.01M3 3l18 18"
+                    ></path>
+                </svg>AI</a
+            >
+        </li>
+        <li>
+            <a href="/about" class="">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                >
+                    <path d="M0 0h24v24H0z" fill="none"></path>
+                    <g fill="currentColor">
+                        <path
+                            d="m12 2l.117.007a1 1 0 0 1 .876.876L13 3v4l.005.15a2 2 0 0 0 1.838 1.844L15 9h4l.117.007a1 1 0 0 1 .876.876L20 10v9a3 3 0 0 1-2.824 2.995L17 22H7a3 3 0 0 1-2.995-2.824L4 19V5a3 3 0 0 1 2.824-2.995L7 2zm2.82 14.429a1 1 0 0 0-1.391-.25a2.5 2.5 0 0 1-2.858 0a1 1 0 0 0-1.142 1.642a4.5 4.5 0 0 0 5.142 0a1 1 0 0 0 .25-1.392M10.006 12h-.01a1 1 0 0 0 0 2h.01a1 1 0 0 0 0-2m4 0h-.01a1 1 0 0 0 0 2h.01a1 1 0 0 0 0-2"
+                        ></path>
+                        <path d="M19 7h-4l-.001-4.001z"></path>
+                    </g>
+                </svg>About</a
+            >
+        </li>
     </ul>
 </nav>
 
@@ -10,7 +92,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        padding-block: 1rem;
+        padding-block: 1.5rem;
     }
 
     ul.nav-list {
@@ -19,24 +101,28 @@
         gap: 2.25rem;
         list-style: none;
 
-        @media(width > 900px) {
+        @media (width > 900px) {
             gap: 4rem;
         }
     }
 
     a {
-        text-decoration: none;
+        display: inline-flex;
+        gap: 0.25rem;
+        align-items: center;
         color: black;
         font-size: 1.4rem;
+        text-decoration: underline;
+        font-size: 1rem;
 
-        &:hover {
-            text-decoration: underline;
+        @media (width > 768px) {
+            font-size: 1.25rem;
         }
     }
 
     @media (prefers-color-scheme: dark) {
         a {
-            color: #fefefe
+            color: #fefefe;
         }
     }
 </style>

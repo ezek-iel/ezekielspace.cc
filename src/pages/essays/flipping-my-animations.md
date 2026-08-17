@@ -5,6 +5,7 @@ date: 2026-02-23
 tags: ["Software"]
 layout: "../../layouts/postlayout.astro"
 description: "FLIP is the most useful web animation technique. Here is a tiny deep dive into how it works in two useful scenarios"
+visible: true
 ---
 
 FLIP is the most famous web animation technique. it is also the most useful. The [original article](https://aerotwist.com/blog/flip-your-animations/) uses `requestAnimationFrame` function in JavaScript, but, I am using the new [Web Animations API (WAAPI)](https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API/Using_the_Web_Animations_API)

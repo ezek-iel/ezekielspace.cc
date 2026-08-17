@@ -5,6 +5,7 @@ date: 2026-05-18
 tags: ["Technology", "Coding"]
 layout: "../../layouts/postlayout.astro"
 description: "What I cannot create, I do not understand.— Richard Feynman"
+visible: true
 ---
 
 I've been on a trip down the computing rabbit-hole. From handling UTF-8 to syntax parsing and memory management.

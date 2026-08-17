@@ -7,11 +7,13 @@ const allPosts: Post[] = Object.values(
     import.meta.glob("./essays/*.md", { eager: true }),
 );
 
-const allPostsDescending = allPosts.sort(
-    (postA, postB) =>
-        new Date(postB.frontmatter.date).getTime() -
-        new Date(postA.frontmatter.date).getTime(),
-);
+const allPostsDescending = allPosts
+    .filter((post) => post.frontmatter.visible)
+    .sort(
+        (postA, postB) =>
+            new Date(postB.frontmatter.date).getTime() -
+            new Date(postA.frontmatter.date).getTime(),
+    );
 ---
 
 <Base
@@ -19,9 +21,9 @@ const allPostsDescending = allPosts.sort(
     url="posts"
     description={"All essays from ezekiel. Ezekiel is a software developer who lives in Lagos. He loves understanding how things works. You will most likely see him nerding out on documentaries, books or playing hard games"}
 >
-<div class="container">
+    <div class="container">
         <h1 class="heading">Posts by Ezekiel</h1>
-        <ul>
+        <ul class="posts-listing">
             {
                 allPostsDescending.map((post) => (
                     <li>
@@ -50,7 +52,7 @@ const allPostsDescending = allPosts.sort(
     }
     h3 {
         text-decoration: none;
-        font-family: 'Gloria Hallelujah';
+        font-family: "Gloria Hallelujah";
     }
 
     article {
@@ -85,6 +87,7 @@ const allPostsDescending = allPosts.sort(
         display: flex;
         flex-direction: column;
         gap: 3rem;
+        padding-left: 0;
     }
 
     .container {

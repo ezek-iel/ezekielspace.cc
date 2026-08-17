@@ -5,6 +5,7 @@ date: 2026-04-14
 tags: ["Life", "Future"]
 layout: "../../layouts/postlayout.astro"
 description: "The end justifies the means, not the beginning"
+visible: true
 ---
 I don't like writing motivational essays. Yet, this is going to be the first one I'll ever write. Why? because its needed.
 
