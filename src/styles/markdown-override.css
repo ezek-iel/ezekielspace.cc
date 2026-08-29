@@ -28,6 +28,12 @@
 
     }
 
+    p  {
+    	@media (width > 1024px) {
+    	line-height: 2;
+    	}
+    }
+
     img {
         width: 100% !important;
         height: auto !important;
