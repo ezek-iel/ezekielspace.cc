@@ -27,11 +27,7 @@
         }
 
     }
-
-    p  {
-    	line-height: 2;
-    }
-
+    
     img {
         width: 100% !important;
         height: auto !important;
@@ -85,6 +81,7 @@ ol:not(.tags) {
 
 p,
 li {
+	line-height: 2;
     font-size: 1.25rem;
 }
 
