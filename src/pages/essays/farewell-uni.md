@@ -5,7 +5,6 @@ date: 2026-07-18
 tags: ["Future", "Community", "Friendship"]
 layout: "../../layouts/postlayout.astro"
 description: "Thank God for how far he has brought us..."
-pinned: true
 visible: true
 ---
 I remember vividly well, my first day of CU on the 19th of September, 2022. 
