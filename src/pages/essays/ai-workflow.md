@@ -44,8 +44,7 @@ And No, AI is not replacing Software Engineers.
 
 Just be good at what you do.
 
-[^1]: If you take into account where I live, the dollar is a bit more expensive than it's meant to be`
 
-[^2]: Though the best thing about GUI is diffs, I'm not changing my mind.
-
+[^1]: Though the best thing about GUI is diffs, I'm not changing my mind.
+[^2]: If you take into account where I live, the dollar is a bit more expensive than it's meant to be
 [^3]: A way for me to actually understand what I am building

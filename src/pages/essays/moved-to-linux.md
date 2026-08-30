@@ -64,4 +64,4 @@ It has really been a fun ride.
 
 [^1]: Well, they all have linux versions. I just recently checked.
 
-[^2]: I am talking about `fg, bg` in comparison with `Set-Job` and `Receive-Job`
+[^2]: I am talking about `fg, bg` in comparison with `Start-Job` and `Receive-Job`
