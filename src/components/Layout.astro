@@ -1,6 +1,29 @@
 ---
 import Navbar from "./Navbar.astro";
+import "../styles/app.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "Ezekiel — software that works perfectly",
+  description = "I build software that works perfectly and runs seamlessly.",
+} = Astro.props;
 ---
 
-<Navbar></Navbar>
-<slot />
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <Navbar></Navbar>
+    <slot />
+  </body>
+</html>

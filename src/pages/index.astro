@@ -1,9 +1,10 @@
 ---
 import Layout from "../components/Layout.astro";
-import "../styles/app.css";
+import FallingPills from "../components/FallingPills.astro";
 ---
 
 <Layout>
+    <FallingPills/>
   <main>
     <p class="top">Hello, I'm Ezekiel</p>
     <h1 class="title heading">
@@ -21,16 +22,22 @@ import "../styles/app.css";
 
 <style>
   main {
-    padding-inline: 2rem;
-    padding-block-start: 18rem;
+    position: relative;
+    z-index: 1;
+    padding-inline: 0.5rem;
+    padding-block-start: 1rem;
     display: flex;
     flex-direction: column;
+    
+    max-width: 1024px;
+    margin-inline: auto;
   }
 
   .top,
   .bottom {
     text-align: center;
-    font-size: 3rem;
+    /* 3rem on desktop, ~1rem on phones */
+    font-size: 1.25rem;
     color: #212121;
 
     strong {
@@ -39,7 +46,8 @@ import "../styles/app.css";
   }
 
   .heading {
-    font-size: 8rem;
+    /* 8rem on desktop, ~2.1rem on phones */
+    font-size: 3.5rem;
     line-height: 0.95;
     letter-spacing: -0.05em;
     text-align: center;
@@ -50,4 +58,17 @@ import "../styles/app.css";
     }
   }
 
+  @media (width > 1024px) {
+    .heading {
+      font-size: 5rem;
+    }
+
+    .main {
+      padding-block-start: 0;
+    }
+
+    .top, .bottom {
+      font-size: 1.5rem;
+    }
+  }
 </style>

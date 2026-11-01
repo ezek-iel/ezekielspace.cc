@@ -26,36 +26,43 @@ import { Icon } from "astro-icon/components";
 
 <style>
     .navbar {
+        position: relative;
+        z-index: 1;
         padding-block: 0.25rem;
         margin-block-start: 0.5rem;
+        padding-inline: 1.5rem;
         display: flex;
         gap: 0.5rem;
         align-items: center;
         justify-content: center;
+        flex-wrap: wrap;
     }
 
     .links {
         background-color: #eeeeee;
         border: 1px solid #e0e0e0;
         color: #424242;
-        padding-block: 1rem;
-        padding-inline: 1.5rem;
+        /* fluid: full desktop size on large screens, legible on phones */
+        font-size: 1rem;
+        padding-block: 0.223em;
+        padding-inline: 0.665em;
         border-radius: 10rem;
         display: flex;
-        gap: 0.25rem;
-        font-size: 2.25rem;
+        gap: 0.11em;
+        max-width: 100%;
     }
 
     .links li {
-        padding-block: 1rem;
-        padding-inline: 2rem;
+        padding-block: 0.445em;
+        padding-inline: 0.89em;
         
         display: flex;
-        gap: 1rem;
+        gap: 0.445em;
         align-items: center;
 
         border-radius: 10rem;
         position: relative;
+        white-space: nowrap;
 
         &:hover {
             background-color: #E0E0E0;
@@ -69,18 +76,31 @@ import { Icon } from "astro-icon/components";
         }
     }
 
+    /* icons are decorative — drop them before the labels have to shrink */
+    @media (max-width: 26rem) {
+        .links li > svg {
+            display: none;
+        }
+    }
+
     .mail-button {
         display: inline-flex;
         align-items: center;
         background-color: #FFA000;
-        font-size: 3rem;
+        font-size: 1.25rem;
         border-radius: 6rem;
-        padding: 2rem 2rem;
+        padding: 0.667em;
 
          &:hover {
             background-color: #FF6F00;
             transition: color 0.2s ease;
         }
 
+    }
+
+    @media (width > 1024px) {
+        .links {
+            font-size: 1.25rem;
+        }
     }
 </style>

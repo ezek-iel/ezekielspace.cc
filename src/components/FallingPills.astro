@@ -1,0 +1,766 @@
+---
+// Falling UI pills: rounded label chips (text + a trailing icon) that fall,
+// spin and bounce as Matter.js rigid bodies.
+//
+// The chips are real DOM nodes rendered with astro-icon, so labels use the real
+// site fonts and icons are real SVGs; Matter.js only drives their transforms.
+import { Icon } from "astro-icon/components";
+
+type Variant =
+  | "orange"
+  | "amber"
+  | "pink"
+  | "mint"
+  | "sky"
+  | "lavender"
+  | "lime"
+  | "light"
+  | "dark";
+
+type Size = "sm" | "md" | "lg";
+
+/** Material-3-Expressive-ish decorative solids. */
+export type ShapeKind =
+  | "circle"
+  | "squircle"
+  | "soft-square"
+  | "gem"
+  | "arch"
+  | "flower"
+  | "burst"
+  | "cookie";
+
+export interface Pill {
+  label: string;
+  icon: string;
+  variant?: Variant;
+  size?: Size;
+}
+
+export interface DecoShape {
+  shape: ShapeKind;
+  variant?: Variant;
+  size?: Size;
+}
+
+interface Props {
+  pills?: Pill[];
+  /** Decorative solids that fall alongside the labelled chips. */
+  shapes?: DecoShape[];
+  /** Render above the page content instead of behind it. */
+  above?: boolean;
+  /** Drop an extra pill wherever you click (fine pointers only). */
+  interactive?: boolean;
+}
+
+const {
+  pills = [
+    { label: "Making it pop", icon: "tabler:sparkles", variant: "orange", size: "lg" },
+    { label: "Testing", icon: "tabler:test-pipe", variant: "sky", size: "md" },
+    { label: "Resilience", icon: "tabler:barbell", variant: "lime", size: "md" },
+    { label: "Touch targets", icon: "tabler:hand-click", variant: "pink", size: "md" },
+    { label: "Thinking systems", icon: "tabler:brain", variant: "dark", size: "md" },
+    { label: "Verified", icon: "tabler:rosette-discount-check", variant: "mint", size: "sm" },
+    { label: "Agents", icon: "tabler:robot-face", variant: "lavender", size: "sm" },
+    { label: "Ship it", icon: "tabler:rocket", variant: "amber", size: "sm" },
+  ],
+  shapes = [
+    { shape: "squircle", variant: "mint", size: "lg" },
+    { shape: "flower", variant: "pink", size: "md" },
+    { shape: "burst", variant: "amber", size: "md" },
+    { shape: "gem", variant: "sky", size: "sm" },
+    { shape: "arch", variant: "lavender", size: "md" },
+    { shape: "cookie", variant: "orange", size: "md" },
+    { shape: "circle", variant: "dark", size: "sm" },
+    { shape: "soft-square", variant: "lime", size: "md" },
+  ],
+  above = false,
+  interactive = true,
+} = Astro.props;
+---
+
+<div
+  class:list={["pills-layer", { above }]}
+  data-interactive={interactive ? "true" : "false"}
+  aria-hidden="true"
+>
+  {
+    pills.map((pill) => (
+      <div
+        class:list={[
+          "pill-chip",
+          `variant-${pill.variant ?? "orange"}`,
+          `size-${pill.size ?? "md"}`,
+        ]}
+        data-chip
+      >
+        <span class="pill-label">{pill.label}</span>
+        <Icon name={pill.icon} class="pill-icon" />
+      </div>
+    ))
+  }
+  {
+    shapes.map((solid) => (
+      <div
+        class:list={[
+          "pill-shape",
+          `variant-${solid.variant ?? "orange"}`,
+          `size-${solid.size ?? "md"}`,
+        ]}
+        data-shape={solid.shape}
+      />
+    ))
+  }
+</div>
+
+<script>
+  import Matter from "matter-js";
+
+  const { Engine, Bodies, Body, Composite } = Matter;
+
+  const layer = document.querySelector<HTMLElement>(".pills-layer")!;
+  const interactive =
+    layer.dataset.interactive === "true" &&
+    window.matchMedia("(pointer: fine)").matches;
+
+  interface Chip {
+    el: HTMLElement;
+    body: Matter.Body;
+    width: number;
+    height: number;
+    restingSince: number | null;
+  }
+
+  const rand = (min: number, max: number) => min + Math.random() * (max - min);
+
+  // ---------------------------------------------------------------------------
+  // Physics world
+  // ---------------------------------------------------------------------------
+  const engine = Engine.create();
+  const world = engine.world;
+
+  let width = window.innerWidth;
+  let height = window.innerHeight;
+
+  /** Keeps chips from being wedged against the side walls. */
+  const sideInset = () => (width < 640 ? 8 : 40);
+
+  const walls: Matter.Body[] = [];
+
+  function buildWalls() {
+    Composite.remove(world, walls);
+    walls.length = 0;
+
+    const inset = sideInset();
+    const thickness = 400;
+
+    walls.push(
+      // floor: its top edge sits exactly on the bottom of the viewport, so
+      // settled chips rest on the bottom of the screen rather than floating
+      Bodies.rectangle(
+        width / 2,
+        height + thickness / 2,
+        width + thickness * 2,
+        thickness,
+        { isStatic: true, friction: 0.5 },
+      ),
+      Bodies.rectangle(
+        -thickness / 2 + inset,
+        height / 2,
+        thickness,
+        height * 3,
+        { isStatic: true, friction: 0.3 },
+      ),
+      Bodies.rectangle(
+        width + thickness / 2 - inset,
+        height / 2,
+        thickness,
+        height * 3,
+        { isStatic: true, friction: 0.3 },
+      ),
+    );
+    Composite.add(world, walls);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Chips → rigid bodies
+  //
+  // A DOM measurement gives the real chip size from its text + icon, which
+  // becomes a capsule body (rect + one circle per end) so chips roll and stack
+  // like actual rounded pills.
+  // ---------------------------------------------------------------------------
+  const chips: Chip[] = [];
+
+  const bodyOpts: Matter.IBodyDefinition = {
+    restitution: 0.45,
+    friction: 0.3,
+    frictionAir: 0.012,
+    density: 0.001,
+  };
+
+  /** Labelled chip: capsule body (rect + a circle at each end). */
+  function capsuleBody(w: number, h: number, x: number, y: number) {
+    const radius = h / 2;
+    const barrel = Math.max(w - h, 1);
+
+    const middle = Bodies.rectangle(x, y, barrel, h, bodyOpts);
+    const head = Bodies.circle(x - barrel / 2, y, radius, bodyOpts);
+    const tail = Bodies.circle(x + barrel / 2, y, radius, bodyOpts);
+
+    return Body.create({ parts: [middle, head, tail] });
+  }
+
+  // ---------------------------------------------------------------------------
+  // Expressive solids
+  //
+  // Each shape is one normalised outline (points in the range -1…1) that is
+  // used for BOTH the CSS clip-path and the collision geometry, so what you see
+  // is what the engine simulates.
+  //
+  //  • convex shapes → a single polygon body built from the convex hull
+  //  • petal shapes   → a compound of circles (a hull would swallow the petals)
+  // ---------------------------------------------------------------------------
+  type Pt = [number, number];
+  const STEPS = 72;
+
+  /** Superellipse: n=2 circle, n=4 squircle, n→1 rounded diamond. */
+  function superellipse(n: number, steps = STEPS): Pt[] {
+    const pts: Pt[] = [];
+    for (let i = 0; i < steps; i++) {
+      const t = (i / steps) * Math.PI * 2;
+      const c = Math.abs(Math.cos(t));
+      const s = Math.abs(Math.sin(t));
+      const r = 1 / Math.pow(Math.pow(c, n) + Math.pow(s, n), 1 / n);
+      pts.push([r * Math.cos(t), r * Math.sin(t)]);
+    }
+    return pts;
+  }
+
+  /** Lobed outline, e.g. a 4-petal flower or an 8-point burst. */
+  function lobed(lobes: number, amp: number, steps = STEPS): Pt[] {
+    const pts: Pt[] = [];
+    for (let i = 0; i < steps; i++) {
+      const t = (i / steps) * Math.PI * 2;
+      const r = 1 + amp * Math.cos(lobes * t);
+      pts.push([r * Math.cos(t), r * Math.sin(t)]);
+    }
+    return pts;
+  }
+
+  /** Circle with two bites taken out of it. */
+  function cookie(steps = STEPS): Pt[] {
+    const bites = [1.0, 3.9];
+    const pts: Pt[] = [];
+    for (let i = 0; i < steps; i++) {
+      const t = (i / steps) * Math.PI * 2;
+      let r = 1;
+      for (const bite of bites) {
+        // shortest wrapped angular distance to the bite
+        const d = Math.atan2(Math.sin(t - bite), Math.cos(t - bite));
+        r -= 0.28 * Math.exp(-(d * d) / 0.055);
+      }
+      pts.push([r * Math.cos(t), r * Math.sin(t)]);
+    }
+    return pts;
+  }
+
+  /** Rounded top over a flat base. */
+  function arch(steps = 40): Pt[] {
+    const pts: Pt[] = [];
+    for (let i = 0; i <= steps; i++) {
+      const t = (i / steps) * Math.PI;
+      pts.push([Math.cos(t), -Math.sin(t)]);
+    }
+    pts.push([-1, 0.3], [-0.72, 0.4], [0.72, 0.4], [1, 0.3]);
+    return pts;
+  }
+
+  /**
+   * Centre an outline on its area centroid, then fit it inside the -1…1 box.
+   *
+   * Centring matters: Matter re-centres a polygon on its centroid when the body
+   * is created, so if the clip-path frame and the collision frame disagree the
+   * silhouette drifts away from the thing that actually collides.
+   */
+  function normalise(pts: Pt[]): Pt[] {
+    const centre = Matter.Vertices.centre(
+      pts.map(([x, y]) => ({ x, y })) as Matter.Vector[],
+    );
+    const centred = pts.map(([x, y]) => [x - centre.x, y - centre.y] as Pt);
+    const max =
+      centred.reduce((m, [x, y]) => Math.max(m, Math.abs(x), Math.abs(y)), 0) ||
+      1;
+    // uniform scale, so the centroid stays at the origin
+    return centred.map(([x, y]) => [x / max, y / max] as Pt);
+  }
+
+  const OUTLINES: Record<string, () => Pt[]> = {
+    circle: () => normalise(superellipse(2)),
+    squircle: () => normalise(superellipse(4)),
+    "soft-square": () => normalise(superellipse(6)),
+    gem: () => normalise(superellipse(1.45)),
+    arch: () => normalise(arch()),
+    flower: () => normalise(lobed(4, 0.24)),
+    burst: () => normalise(lobed(8, 0.32)),
+    cookie: () => normalise(cookie()),
+  };
+
+  const outlineCache = new Map<string, Pt[]>();
+  function outline(shape: string): Pt[] {
+    let pts = outlineCache.get(shape);
+    if (!pts) {
+      const make = OUTLINES[shape] ?? OUTLINES.squircle;
+      pts = make();
+      outlineCache.set(shape, pts);
+    }
+    return pts;
+  }
+
+  /** Compound-of-circles collision for the petal shapes. */
+  function ring(lobes: number, dist: number, lobeR: number, coreR: number) {
+    const circles = [{ cx: 0, cy: 0, r: coreR }];
+    for (let i = 0; i < lobes; i++) {
+      const t = (i / lobes) * Math.PI * 2;
+      circles.push({ cx: Math.cos(t) * dist, cy: Math.sin(t) * dist, r: lobeR });
+    }
+    return circles;
+  }
+
+  const SOLIDS: Record<string, ReturnType<typeof ring>> = {
+    flower: ring(4, 0.78, 0.24, 0.64),
+    burst: ring(8, 0.78, 0.24, 0.56),
+  };
+
+  /** Decorative solid: polygon hull, or a compound of circles for petals. */
+  function shapeBody(shape: string, w: number, h: number, x: number, y: number) {
+    const rx = w / 2;
+    const ry = h / 2;
+    const scale = Math.min(rx, ry);
+
+    const solid = SOLIDS[shape];
+    if (solid) {
+      const parts = solid.map((c) =>
+        Bodies.circle(x + c.cx * rx, y + c.cy * ry, c.r * scale, bodyOpts),
+      );
+      return Body.create({ parts });
+    }
+
+    const hull = Matter.Vertices.hull(
+      outline(shape).map(([px, py]) => ({ x: px * rx, y: py * ry }) as Matter.Vector),
+    );
+
+    // build at the origin, then move — fromVertices translates the vertices by
+    // the x/y it is given, so passing the final position directly shifts twice
+    const body = Bodies.fromVertices(0, 0, [hull], bodyOpts, true, true);
+    if (!body) return Bodies.circle(x, y, scale, bodyOpts);
+    Body.setPosition(body, { x, y });
+    return body;
+  }
+
+  function buildBody(el: HTMLElement, w: number, h: number, x: number, y: number) {
+    const shape = el.dataset.shape;
+    return shape
+      ? shapeBody(shape, w, h, x, y)
+      : capsuleBody(w, h, x, y);
+  }
+
+  /** Paint a solid's silhouette with a clip-path from the same outline. */
+  function clipShape(el: HTMLElement) {
+    const shape = el.dataset.shape;
+    if (!shape) return;
+    const poly = outline(shape)
+      .map(([px, py]) => `${(((px + 1) / 2) * 100).toFixed(2)}% ${(((py + 1) / 2) * 100).toFixed(2)}%`)
+      .join(", ");
+    el.style.clipPath = `polygon(${poly})`;
+  }
+
+  function addChip(el: HTMLElement, x: number, y: number): Chip {
+    const w = el.offsetWidth;
+    const h = el.offsetHeight;
+    const body = buildBody(el, w, h, x, y);
+
+    Body.setAngle(body, rand(-0.45, 0.45));
+    Body.setAngularVelocity(body, rand(-0.04, 0.04));
+    Composite.add(world, body);
+
+    const chip: Chip = { el, body, width: w, height: h, restingSince: null };
+    chips.push(chip);
+    return chip;
+  }
+
+  /** Rebuild a body after its rendered size changed (font/fit/resize). */
+  function syncBody(chip: Chip) {
+    const w = chip.el.offsetWidth;
+    const h = chip.el.offsetHeight;
+    if (!w || !h || (w === chip.width && h === chip.height)) return;
+
+    const { x, y } = chip.body.position;
+    const { angle } = chip.body;
+    const velocity = { ...chip.body.velocity };
+    const angularVelocity = chip.body.angularVelocity;
+
+    Composite.remove(world, chip.body);
+    chip.body = buildBody(chip.el, w, h, x, y);
+    chip.width = w;
+    chip.height = h;
+    Body.setAngle(chip.body, angle);
+    Body.setVelocity(chip.body, velocity);
+    Body.setAngularVelocity(chip.body, angularVelocity);
+    Composite.add(world, chip.body);
+  }
+
+  // Element is centred on the body and rotated around its own centre:
+  // transform-origin is 0 0, so translate(-50%,-50%) puts the chip's centre at
+  // the origin before rotating and moving it into place.
+  function place(el: HTMLElement, x: number, y: number, angle: number) {
+    el.style.transform =
+      `translate3d(${x}px, ${y}px, 0)` +
+      ` rotate(${angle}rad) translate(-50%, -50%)`;
+  }
+
+  function paint(chip: Chip) {
+    place(chip.el, chip.body.position.x, chip.body.position.y, chip.body.angle);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Fitting: scale a chip down only as far as it needs to stay on screen, so
+  // labels stay as large as possible (especially on narrow phones).
+  // ---------------------------------------------------------------------------
+  function fitChip(el: HTMLElement) {
+    el.style.setProperty("--chip-fit", "1");
+    const maxWidth = width - sideInset() * 2;
+    const natural = el.offsetWidth;
+    if (natural <= maxWidth) return;
+
+    const fit = maxWidth / natural;
+    el.style.setProperty("--chip-fit", String(fit));
+
+    // correct for the non-scaling bits (letter-spacing, borders) if needed
+    const after = el.offsetWidth;
+    if (after > maxWidth) {
+      el.style.setProperty("--chip-fit", String(fit * (maxWidth / after)));
+    }
+  }
+
+  function respawn(chip: Chip) {
+    const halfW = chip.width / 2 + sideInset();
+    const maxX = Math.max(width - halfW, halfW);
+
+    Body.setPosition(chip.body, {
+      x: rand(halfW, maxX),
+      y: rand(-height * 0.5, -chip.height * 2),
+    });
+    Body.setAngle(chip.body, rand(-0.45, 0.45));
+    Body.setAngularVelocity(chip.body, rand(-0.04, 0.04));
+    Body.setVelocity(chip.body, { x: rand(-1, 1), y: rand(0, 2) });
+    chip.restingSince = null;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Main loop
+  // ---------------------------------------------------------------------------
+  const MAX_DELTA_MS = 1000 / 60; // Engine.update() takes ms, one frame max
+  const MAX_REST_MS = 5000; // recycle a chip that has settled for this long
+
+  let lastTime = performance.now();
+
+  function tick(time: number) {
+    // Clamp so a backgrounded tab doesn't fling every body off-screen.
+    const delta = Math.min(time - lastTime, MAX_DELTA_MS);
+    lastTime = time;
+
+    Engine.update(engine, delta);
+
+    for (const chip of chips) {
+      paint(chip);
+
+      if (chip.body.position.y - chip.height > height + 300) {
+        respawn(chip);
+        continue;
+      }
+
+      // Settled on the floor for a while → drop it back in from the top.
+      const nearFloor = chip.body.position.y > height - 260;
+      if (chip.body.speed < 0.15 && nearFloor) {
+        if (chip.restingSince === null) chip.restingSince = time;
+        else if (time - chip.restingSince > MAX_REST_MS) respawn(chip);
+      } else {
+        chip.restingSince = null;
+      }
+    }
+
+    requestAnimationFrame(tick);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Setup
+  // ---------------------------------------------------------------------------
+  function resize() {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    buildWalls();
+    for (const chip of chips) {
+      fitChip(chip.el);
+      syncBody(chip);
+    }
+  }
+
+  /**
+   * Reduced-motion layout: place the chips in a loose grid, no simulation.
+   * Positions are in px (percentages inside translate() would resolve against
+   * the chip's own size, not the viewport), and kept fully on screen.
+   */
+  const clamp = (v: number, lo: number, hi: number) =>
+    Math.min(Math.max(v, lo), Math.max(lo, hi));
+
+  function layoutStatic(els: HTMLElement[]) {
+    const cols = width >= 1100 ? 3 : width >= 720 ? 2 : 1;
+    const rows = Math.ceil(els.length / cols);
+    const cellW = width / cols;
+    const cellH = height / rows;
+
+    els.forEach((el, i) => {
+      const chipW = el.offsetWidth;
+      const chipH = el.offsetHeight;
+      const col = i % cols;
+      const row = Math.floor(i / cols);
+
+      // deterministic, so the layout is stable across reloads
+      const angle = Math.sin(i * 1.7) * 0.12;
+      const jitterX = Math.cos(i * 2.3) * cellW * 0.06;
+      const jitterY = Math.sin(i * 2.9) * cellH * 0.1;
+
+      const x = clamp(
+        (col + 0.5) * cellW + jitterX,
+        chipW / 2 + 12,
+        width - chipW / 2 - 12,
+      );
+      const y = clamp(
+        (row + 0.5) * cellH + jitterY,
+        chipH / 2 + 12,
+        height - chipH / 2 - 12,
+      );
+
+      place(el, x, y, angle);
+    });
+  }
+
+  function dropChipAt(x: number, y: number) {
+    const source = chips[Math.floor(Math.random() * chips.length)];
+    if (!source) return;
+
+    const el = source.el.cloneNode(true) as HTMLElement;
+    el.style.setProperty("--chip-fit", source.el.style.getPropertyValue("--chip-fit") || "1");
+    layer.appendChild(el);
+    addChip(el, x, y);
+  }
+
+  async function start() {
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    buildWalls();
+
+    // Chips are sized from their rendered text, so wait (briefly) for fonts.
+    const fontsReady = (async () => {
+      try {
+        await document.fonts.ready;
+      } catch {
+        /* fall back to whatever metrics we have */
+      }
+    })();
+    await Promise.race([fontsReady, new Promise((r) => setTimeout(r, 500))]);
+
+    const els = Array.from(
+      layer.querySelectorAll<HTMLElement>("[data-chip], [data-shape]"),
+    );
+    els.forEach(clipShape);
+    els.forEach(fitChip);
+
+    if (reducedMotion) {
+      layoutStatic(els);
+      window.addEventListener("resize", () => {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        els.forEach(fitChip);
+        layoutStatic(els);
+      });
+      return;
+    }
+
+    els.forEach((el, i) => {
+      const x = rand(width * 0.15, width * 0.85);
+      const y = -rand(0.2, 1.1) * height - i * 40;
+      const chip = addChip(el, x, y);
+      Body.setVelocity(chip.body, { x: rand(-1, 1), y: rand(0, 2) });
+      paint(chip);
+    });
+
+    // Keep bodies in sync when an element's rendered size changes (font load,
+    // viewport resize, orientation change, breakpoint switch).
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const chip = chips.find((c) => c.el === entry.target);
+        if (chip) syncBody(chip);
+      }
+    });
+    for (const chip of chips) observer.observe(chip.el);
+
+    requestAnimationFrame(tick);
+    window.addEventListener("resize", resize);
+
+    if (interactive) {
+      window.addEventListener("pointerdown", (e) => {
+        if (chips.length > els.length * 2) return;
+        dropChipAt(e.clientX, e.clientY);
+      });
+    }
+  }
+
+  start();
+</script>
+
+<style>
+  .pills-layer {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .pills-layer.above {
+    z-index: 2;
+  }
+
+  .pill-chip {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    padding-block: 0.55em;
+    padding-inline: 1.05em 0.8em;
+    border-radius: 999px;
+    font-family: "Bricolage Grotesque Variable", ui-sans-serif, system-ui,
+      sans-serif;
+    font-weight: 600;
+    /* --chip-fit is set by the script to keep wide labels on screen */
+    font-size: calc(var(--chip-font-size) * var(--chip-fit, 1));
+    line-height: 1;
+    letter-spacing: 0.005em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    will-change: transform;
+    transform-origin: 0 0;
+    user-select: none;
+  }
+
+  .pill-icon {
+    width: 1.05em;
+    height: 1.05em;
+    flex: none;
+    stroke-width: 2.2;
+    /* keep the icon outlines soft/rounded like the chip itself */
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* Decorative solids — the silhouette comes from a clip-path set by the
+     script, so only the box and the fill colour are defined here. */
+  .pill-shape {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: var(--shape-size);
+    height: var(--shape-size);
+    will-change: transform;
+    transform-origin: 0 0;
+  }
+
+  /* Type scale: stays readable on phones, deliberately smaller on desktop. */
+  .size-sm {
+    --chip-font-size: 1.2rem;
+    --shape-size: 3rem;
+  }
+
+  .size-md {
+    --chip-font-size: 1.45rem;
+    --shape-size: 4.25rem;
+  }
+
+  .size-lg {
+    --chip-font-size: 1.8rem;
+    --shape-size: 6rem;
+  }
+
+  /* Above 1024px the chips shrink — they read as background detail, not as
+     competing headlines. */
+  @media (width > 1024px) {
+    .size-sm {
+      --chip-font-size: 0.9rem;
+      --shape-size: 2.5rem;
+    }
+
+    .size-md {
+      --chip-font-size: 1.05rem;
+      --shape-size: 3.5rem;
+    }
+
+    .size-lg {
+      --chip-font-size: 1.3rem;
+      --shape-size: 4.75rem;
+    }
+  }
+
+  /* Variants — one distinct colour per chip. #fd8a49 is the orange from the
+     reference chip; the rest are tinted pastels that stay legible with dark
+     text (all comfortably above 4.5:1). */
+  .variant-orange {
+    background-color: #fd8a49;
+    color: #141414;
+  }
+
+  .variant-amber {
+    background-color: #ffb300;
+    color: #141414;
+  }
+
+  .variant-pink {
+    background-color: #fccfe9;
+    color: #141414;
+  }
+
+  .variant-mint {
+    background-color: #5bdaa5;
+    color: #141414;
+  }
+
+  .variant-sky {
+    background-color: #a5d8ff;
+    color: #141414;
+  }
+
+  .variant-lavender {
+    background-color: #d0bfff;
+    color: #141414;
+  }
+
+  .variant-lime {
+    background-color: #d9f99d;
+    color: #141414;
+  }
+
+  .variant-light {
+    background-color: #eeeeee;
+    color: #424242;
+    box-shadow: inset 0 0 0 1px #e0e0e0;
+  }
+
+  .variant-dark {
+    background-color: #212121;
+    color: #fafafa;
+  }
+</style>
