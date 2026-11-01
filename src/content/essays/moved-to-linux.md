@@ -6,7 +6,6 @@ tags:
   - Coding
   - technical
   - Workflows
-layout: ../../layouts/postlayout.astro
 description: Linux is really the best operating system when you begin to use it.
 visible: true
 pinned: true

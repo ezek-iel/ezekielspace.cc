@@ -6,7 +6,6 @@ tags:
   - Coding
   - technical
   - Workflows
-layout: ../../layouts/postlayout.astro
 description: edge cases in DSA problems are very tricky to find and easy to forget
 visible: true
 ---

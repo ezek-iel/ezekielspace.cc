@@ -3,7 +3,6 @@ title: "FLIP-ping my animations"
 author: "Ezekiel"
 date: 2026-02-23
 tags: ["Software"]
-layout: "../../layouts/postlayout.astro"
 description: "FLIP is the most useful web animation technique. Here is a tiny deep dive into how it works in two useful scenarios"
 visible: true
 ---

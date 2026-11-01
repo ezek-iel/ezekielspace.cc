@@ -3,7 +3,6 @@ title: "To those who feel left behind"
 author: "Ezekiel"
 date: 2026-04-14
 tags: ["Life", "Future"]
-layout: "../../layouts/postlayout.astro"
 description: "The end justifies the means, not the beginning"
 visible: true
 ---

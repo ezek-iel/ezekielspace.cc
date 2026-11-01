@@ -1,7 +1,8 @@
 {
-  "name": "",
+  "name": "ezekielspace",
   "type": "module",
   "version": "0.0.1",
+  "private": true,
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
@@ -9,14 +10,6 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/sitemap": "^3.7.3",
-    "@fontsource-variable/space-grotesk": "^5.2.10",
-    "@fontsource-variable/ubuntu-sans-mono": "^5.2.10",
-    "@fontsource/gloria-hallelujah": "^5.2.8",
-    "astro": "^5.17.1",
-    "gray-matter": "^4.0.3",
-    "moment": "^2.30.1",
-    "satori": "^0.19.2",
-    "sharp": "^0.34.5"
+    "astro": "7.4.4"
   }
 }

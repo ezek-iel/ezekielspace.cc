@@ -3,7 +3,6 @@ title: "Into another Phase"
 author: "Ezekiel"
 date: 2026-07-18
 tags: ["Future", "Community", "Friendship"]
-layout: "../../layouts/postlayout.astro"
 description: "Thank God for how far he has brought us..."
 visible: true
 ---

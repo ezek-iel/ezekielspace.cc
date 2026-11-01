@@ -5,7 +5,6 @@ date: 2026-08-29
 tags:
   - technical
   - future
-layout: ../../layouts/postlayout.astro
 description: How do I even really use AI?
 visible: true
 ---
