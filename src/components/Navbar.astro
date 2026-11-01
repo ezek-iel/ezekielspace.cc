@@ -1,0 +1,86 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<nav class="navbar">
+    <ul class="links">
+        <li>
+            <Icon name="tabler:pencil-bolt" />Essays
+            <a href=""></a>
+        </li>
+        <li>
+            <Icon name="tabler:mood-smile" />About
+            <a href=""></a>
+        </li>
+        <li>
+            <Icon name="tabler:robot-off" />AI
+            <a href=""></a>
+        </li>
+        <li>
+            <Icon name="tabler:file-cv" />CV
+            <a href=""></a>
+        </li>
+    </ul>
+    <button class="mail-button"><Icon name="tabler:mail"/></button>
+</nav>
+
+<style>
+    .navbar {
+        padding-block: 0.25rem;
+        margin-block-start: 0.5rem;
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .links {
+        background-color: #eeeeee;
+        border: 1px solid #e0e0e0;
+        color: #424242;
+        padding-block: 1rem;
+        padding-inline: 1.5rem;
+        border-radius: 10rem;
+        display: flex;
+        gap: 0.25rem;
+        font-size: 2.25rem;
+    }
+
+    .links li {
+        padding-block: 1rem;
+        padding-inline: 2rem;
+        
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+
+        border-radius: 10rem;
+        position: relative;
+
+        &:hover {
+            background-color: #E0E0E0;
+            transition: color 0.2s ease;
+        }
+       
+        a {
+            position: absolute;
+            inset: 0;
+            border-radius: 10rem;
+        }
+    }
+
+    .mail-button {
+        display: inline-flex;
+        align-items: center;
+        background-color: #FFA000;
+        font-size: 3rem;
+        border-radius: 6rem;
+        padding: 2rem 2rem;
+
+         &:hover {
+            background-color: #FF6F00;
+            transition: color 0.2s ease;
+        }
+
+    }
+</style>

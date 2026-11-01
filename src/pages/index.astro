@@ -1,28 +1,53 @@
 ---
-// Scaffolding only — replace with the real design.
-import { getCollection } from 'astro:content';
-
-const essays = (await getCollection('essays', ({ data }) => data.visible)).sort(
-  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
-);
+import Layout from "../components/Layout.astro";
+import "../styles/app.css";
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Ezekiel</title>
-  </head>
-  <body>
-    <h1>Essays</h1>
-    <ul>
-      {
-        essays.map((essay) => (
-          <li>
-            <a href={`/essays/${essay.id}/`}>{essay.data.title}</a>
-          </li>
-        ))
-      }
-    </ul>
-  </body>
-</html>
+<Layout>
+  <main>
+    <p class="top">Hello, I'm Ezekiel</p>
+    <h1 class="title heading">
+      I build software that works <span>perfectly</span> and runs <span
+        >seamlessly.</span
+      >
+    </h1>
+    <p class="bottom">
+      Currently working on <strong>Concurrent Programming</strong> and <strong
+        >Task Orchestration</strong
+      >.
+    </p>
+  </main>
+</Layout>
+
+<style>
+  main {
+    padding-inline: 2rem;
+    padding-block-start: 18rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .top,
+  .bottom {
+    text-align: center;
+    font-size: 3rem;
+    color: #212121;
+
+    strong {
+      font-weight: 600;
+    }
+  }
+
+  .heading {
+    font-size: 8rem;
+    line-height: 0.95;
+    letter-spacing: -0.05em;
+    text-align: center;
+    text-wrap: balance;
+
+    span {
+      font-weight: 400;
+    }
+  }
+
+</style>
