@@ -1,27 +1,28 @@
 ---
 import { Icon } from "astro-icon/components";
+import meta from "../meta.json";
 ---
 
 <nav class="navbar">
+    <a href="/" class="home-button"><Icon name="tabler:home"/></a>
     <ul class="links">
         <li>
             <Icon name="tabler:pencil-bolt" />Essays
-            <a href=""></a>
+            <a href="/essays"></a>
         </li>
         <li>
             <Icon name="tabler:mood-smile" />About
-            <a href=""></a>
+            <a href="/about"></a>
         </li>
         <li>
             <Icon name="tabler:robot-off" />AI
-            <a href=""></a>
+            <a href="/ai"></a>
         </li>
         <li>
             <Icon name="tabler:file-cv" />CV
-            <a href=""></a>
+            <a href={meta["cv-link"]}></a>
         </li>
     </ul>
-    <button class="mail-button"><Icon name="tabler:mail"/></button>
 </nav>
 
 <style>
@@ -76,6 +77,21 @@ import { Icon } from "astro-icon/components";
         }
     }
 
+    .home-button {
+        background-color: #212121;
+        display: inline-flex;
+        align-items: center;
+        padding: 0.75rem;
+        border-radius: 50rem;
+        color: #FEFEFE;
+        font-size: 1.25rem;
+
+        &:hover {
+            background-color: #424242;
+            transition: color 200ms ease;
+        }
+    }
+
     /* icons are decorative — drop them before the labels have to shrink */
     @media (max-width: 26rem) {
         .links li > svg {
@@ -83,24 +99,9 @@ import { Icon } from "astro-icon/components";
         }
     }
 
-    .mail-button {
-        display: inline-flex;
-        align-items: center;
-        background-color: #FFA000;
-        font-size: 1.25rem;
-        border-radius: 6rem;
-        padding: 0.667em;
-
-         &:hover {
-            background-color: #FF6F00;
-            transition: color 0.2s ease;
-        }
-
-    }
-
     @media (width > 1024px) {
         .links {
-            font-size: 1.25rem;
+            font-size: 1rem;
         }
     }
 </style>

@@ -1,6 +1,7 @@
 ---
 import Layout from "../components/Layout.astro";
 import FallingPills from "../components/FallingPills.astro";
+import meta from "../meta.json";
 ---
 
 <Layout>
@@ -13,9 +14,7 @@ import FallingPills from "../components/FallingPills.astro";
       >
     </h1>
     <p class="bottom">
-      Currently working on <strong>Concurrent Programming</strong> and <strong
-        >Task Orchestration</strong
-      >.
+      Currently working on <strong>{meta.currentlyWorkingOn}</strong>.
     </p>
   </main>
 </Layout>
@@ -25,7 +24,7 @@ import FallingPills from "../components/FallingPills.astro";
     position: relative;
     z-index: 1;
     padding-inline: 0.5rem;
-    padding-block-start: 1rem;
+    margin-block-start: 5rem;
     display: flex;
     flex-direction: column;
     
@@ -52,6 +51,7 @@ import FallingPills from "../components/FallingPills.astro";
     letter-spacing: -0.05em;
     text-align: center;
     text-wrap: balance;
+    font-weight: 800;
 
     span {
       font-weight: 400;

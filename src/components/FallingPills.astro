@@ -495,10 +495,36 @@ const {
   // ---------------------------------------------------------------------------
   // Setup
   // ---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // Masking the hero copy
+  //
+  // Chips fade out through the hero text and reappear below it, so the headline
+  // never sits on a saturated pill. Stops come from <main>'s measured rect (a
+  // percentage guess breaks between phone sizes because the copy is top-aligned
+  // under the navbar, not centred).
+  //
+  // The gradient itself lives in CSS with 0% default stops, so if these vars are
+  // never set the mask is a no-op instead of hiding the whole layer.
+  // ---------------------------------------------------------------------------
+  const hero = document.querySelector<HTMLElement>("main");
+
+  function syncMaskBounds() {
+    if (!hero) return;
+
+    const { top, bottom } = hero.getBoundingClientRect();
+    // keep the two ramps from crossing on short or landscape viewports
+    const ramp = Math.min(width < 640 ? 56 : 112, (bottom - top) / 2);
+
+    layer.style.setProperty("--copy-top", `${(top / height) * 100}%`);
+    layer.style.setProperty("--copy-bottom", `${(bottom / height) * 100}%`);
+    layer.style.setProperty("--fade", `${(ramp / height) * 100}%`);
+  }
+
   function resize() {
     width = window.innerWidth;
     height = window.innerHeight;
     buildWalls();
+    syncMaskBounds();
     for (const chip of chips) {
       fitChip(chip.el);
       syncBody(chip);
@@ -572,6 +598,10 @@ const {
     })();
     await Promise.race([fontsReady, new Promise((r) => setTimeout(r, 500))]);
 
+    // Mask in both branches: the copy has to stay legible even without motion.
+    syncMaskBounds();
+    if (hero) new ResizeObserver(syncMaskBounds).observe(hero);
+
     const els = Array.from(
       layer.querySelectorAll<HTMLElement>("[data-chip], [data-shape]"),
     );
@@ -583,6 +613,7 @@ const {
       window.addEventListener("resize", () => {
         width = window.innerWidth;
         height = window.innerHeight;
+        syncMaskBounds();
         els.forEach(fitChip);
         layoutStatic(els);
       });
@@ -628,6 +659,32 @@ const {
     z-index: 0;
     pointer-events: none;
     overflow: hidden;
+
+    /* Chips fall in above the copy, fade out behind it, and fade back in below.
+       The script sets these three as percentages of the viewport from <main>'s
+       rect; the 0% defaults collapse every stop onto itself, which leaves a
+       fully opaque gradient — i.e. no mask until the script has measured. */
+    --copy-top: 0%;
+    --copy-bottom: 0%;
+    --fade: 0%;
+    mask-image: linear-gradient(
+      to bottom,
+      #000 0,
+      #000 var(--copy-top),
+      transparent calc(var(--copy-top) + var(--fade)),
+      transparent calc(var(--copy-bottom) - var(--fade)),
+      #000 var(--copy-bottom),
+      #000 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      #000 0,
+      #000 var(--copy-top),
+      transparent calc(var(--copy-top) + var(--fade)),
+      transparent calc(var(--copy-bottom) - var(--fade)),
+      #000 var(--copy-bottom),
+      #000 100%
+    );
   }
 
   .pills-layer.above {
@@ -680,24 +737,24 @@ const {
     transform-origin: 0 0;
   }
 
-  /* Type scale: stays readable on phones, deliberately smaller on desktop. */
+  /* Type scale: phones get the smallest chips — they sit behind the hero copy,
+     so they should read as texture, not as a competing headline. */
   .size-sm {
-    --chip-font-size: 1.2rem;
-    --shape-size: 3rem;
+    --chip-font-size: 0.85rem;
+    --shape-size: 2.25rem;
   }
 
   .size-md {
-    --chip-font-size: 1.45rem;
-    --shape-size: 4.25rem;
+    --chip-font-size: 1rem;
+    --shape-size: 3.25rem;
   }
 
   .size-lg {
-    --chip-font-size: 1.8rem;
-    --shape-size: 6rem;
+    --chip-font-size: 1.2rem;
+    --shape-size: 4.5rem;
   }
 
-  /* Above 1024px the chips shrink — they read as background detail, not as
-     competing headlines. */
+  /* Above 1024px there is room for the chips to be read again. */
   @media (width > 1024px) {
     .size-sm {
       --chip-font-size: 0.9rem;
@@ -712,6 +769,16 @@ const {
     .size-lg {
       --chip-font-size: 1.3rem;
       --shape-size: 4.75rem;
+    }
+  }
+
+  /* Phones: soften the layer, so anything that slips past the mask ramps still
+     can't compete with the copy. */
+  @media (width < 640px) {
+    .pill-chip,
+    .pill-shape {
+      opacity: 0.6;
+      filter: blur(1.2px);
     }
   }
 

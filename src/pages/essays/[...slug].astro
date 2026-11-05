@@ -1,27 +1,47 @@
 ---
 // Scaffolding only — replace with the real post layout.
-import { getCollection, render } from 'astro:content';
+import { getCollection, render } from "astro:content";
+import Layout from "../../components/Layout.astro";
+
+import "../../styles/markdown.css";
 
 export async function getStaticPaths() {
-  const essays = await getCollection('essays');
-  return essays.map((essay) => ({ params: { slug: essay.id }, props: { essay } }));
+  const essays = await getCollection("essays");
+  return essays.map((essay) => ({
+    params: { slug: essay.id },
+    props: { essay },
+  }));
 }
 
 const { essay } = Astro.props;
 const { Content } = await render(essay);
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{essay.data.title}</title>
-    <meta name="description" content={essay.data.description} />
-  </head>
-  <body>
-    <article>
-      <h1>{essay.data.title}</h1>
+<Layout>
+  <article>
+    <h1 class="title essay-title">{essay.data.title}</h1>
+    <div class="content">
       <Content />
-    </article>
-  </body>
-</html>
+    </div>
+  </article>
+</Layout>
+
+<style>
+
+  article {
+    max-width: 768px;
+    margin-inline: auto;
+    margin-block-start: 4rem;
+
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    
+    padding-inline: 1rem;
+  }
+
+  .essay-title {
+    font-size: 3rem;
+    font-weight: 600;
+  }
+</style>
