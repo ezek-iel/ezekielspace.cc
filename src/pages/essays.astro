@@ -23,7 +23,10 @@ const formatDay = (date) =>
     date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 ---
 
-<Layout>
+<Layout
+    title="Essays — Ezekiel Akinfenwa"
+    description="Essays on software engineering, AI tooling, learning in public and building things for the fun of it."
+>
     <div class="container">
         <div>
             <h1 class="title heading">Essays</h1>
@@ -42,7 +45,7 @@ const formatDay = (date) =>
                         <ul class="essay-list">
                             {essays.map((essay) => (
                                 <li class="essay">
-                                    <a class="essay-link" href={`/essays/${essay.id}`}>
+                                    <a class="essay-link" href={`/essays/${essay.id}/`}>
                                         <h3 class="title essay-title">{essay.data.title}</h3>
                                         <time
                                             class="essay-date"

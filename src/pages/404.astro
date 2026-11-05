@@ -1,0 +1,374 @@
+---
+import Layout from "../components/Layout.astro";
+import { Icon } from "astro-icon/components";
+import { NAME } from "../lib/schema";
+import "@fontsource/space-mono";
+
+/** Destinations mirror the navbar, so the chips read as a second way home. */
+const destinations = [
+  { label: "Home", href: "/", icon: "tabler:home" },
+  { label: "Essays", href: "/essays/", icon: "tabler:pencil-bolt" },
+  { label: "About", href: "/about/", icon: "tabler:mood-smile" },
+  { label: "AI", href: "/ai/", icon: "tabler:robot-off" },
+];
+
+/** The three digits of 404, as chips — this site's own design language. */
+const digits = [
+  { label: "4", icon: "tabler:compass-off", variant: "pink", tilt: "-7deg", drop: "6px" },
+  { label: "0", icon: "tabler:ghost", variant: "mint", tilt: "3deg", drop: "-8px" },
+  { label: "4", icon: "tabler:map-pin-off", variant: "sky", tilt: "-3deg", drop: "2px" },
+];
+---
+
+<Layout
+  title={`404 — Page not found — ${NAME}`}
+  description="That URL does not exist on this site. Here is how to find what you were looking for."
+>
+  <meta slot="head" name="robots" content="noindex, follow" />
+
+  <main>
+    {/* Decorative pastel solids, same palette as the homepage chips. */}
+    <div class="backdrop" aria-hidden="true">
+      <span class="solid solid-mint"></span>
+      <span class="solid solid-lavender"></span>
+      <span class="solid solid-lime"></span>
+    </div>
+
+    <h1 class="code" aria-label="404 — page not found">
+      {
+        digits.map((digit) => (
+          <span
+            class:list={["chip", `variant-${digit.variant}`]}
+            style={`--tilt: ${digit.tilt}; --drop: ${digit.drop}`}
+            aria-hidden="true"
+          >
+            <span class="chip-label">{digit.label}</span>
+            <Icon name={digit.icon} class="chip-icon" />
+          </span>
+        ))
+      }
+    </h1>
+
+    <p class="lede">
+      This page wandered off. Links rot, posts get renamed, and I have been
+      known to move things around without telling anyone.
+    </p>
+
+    <nav class="destinations" aria-label="Suggested pages">
+      {
+        destinations.map(({ label, href, icon }) => (
+          <a class="dest" href={href}>
+            <Icon name={icon} />
+            {label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <p class="footnote">
+      <Icon name="tabler:link-off" />
+      If a link somewhere on this site sent you here, that is a bug — <a
+        href="/about/">tell me</a
+      > and I will fix it.
+    </p>
+    <button class="back" id="go-back" type="button" hidden>
+      <Icon name="tabler:arrow-back-up" />
+      Take me back
+    </button>
+  </main>
+</Layout>
+
+<script is:inline>
+  // Only offer "go back" when there is somewhere to go back to, so a visitor
+  // who landed here directly never gets a dead button.
+  const back = document.getElementById("go-back");
+  if (back && history.length > 1) {
+    back.hidden = false;
+    back.addEventListener("click", () => history.back());
+  }
+</script>
+
+<style>
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 640px;
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+    padding-block: 3rem;
+    /* fills the viewport so the composition sits optically centred rather than
+       clinging to the top of a short page */
+    min-block-size: calc(100vh - 6rem);
+    min-block-size: calc(100svh - 6rem);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  /* ---------------------------------------------------------------- backdrop */
+  /* Sized to the viewport, not to the 640px copy column, so the solids land in
+     the side margins instead of crowding the text. */
+  .backdrop {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 100vw;
+    translate: -50% 0;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .solid {
+    position: absolute;
+    display: block;
+    border-radius: 38%;
+  }
+
+  .solid-mint {
+    width: 4.5rem;
+    height: 4.5rem;
+    background: #5bdaa5;
+    top: 9%;
+    left: 5%;
+    rotate: 18deg;
+    opacity: 0.5;
+  }
+
+  .solid-lavender {
+    width: 2.5rem;
+    height: 2.5rem;
+    background: #d0bfff;
+    border-radius: 50%;
+    top: 54%;
+    left: 9%;
+    opacity: 0.55;
+  }
+
+  .solid-lime {
+    width: 3.25rem;
+    height: 3.25rem;
+    background: #d9f99d;
+    border-radius: 42%;
+    top: 26%;
+    right: 7%;
+    rotate: -22deg;
+    opacity: 0.5;
+  }
+
+  /* ------------------------------------------------------------- 404 as chips */
+  .code {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    margin-block: 0;
+    flex-wrap: nowrap;
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.26em;
+    padding: 0.08em 0.4em;
+    border-radius: 999px;
+    rotate: var(--tilt);
+    translate: 0 var(--drop);
+    font-family: "Bricolage Grotesque Variable", ui-sans-serif, system-ui,
+      sans-serif;
+    font-weight: 800;
+    /* sized so all three digits stay on one row from 320px up */
+    font-size: clamp(2.5rem, 11.5vw, 4.5rem);
+    line-height: 1.12;
+    letter-spacing: -0.03em;
+    box-shadow:
+      0 10px 24px -14px rgb(0 0 0 / 0.35),
+      0 1px 2px rgb(0 0 0 / 0.06);
+    transition:
+      rotate 320ms cubic-bezier(0.34, 1.4, 0.64, 1),
+      translate 320ms cubic-bezier(0.34, 1.4, 0.64, 1);
+  }
+
+  /* a wink at the falling chips: hover and the digits topple a little further */
+  .code:hover .chip {
+    rotate: calc(var(--tilt) * 1.9);
+    translate: 0 calc(var(--drop) + 3px);
+  }
+
+  .chip-icon {
+    width: 0.5em;
+    height: 0.5em;
+    stroke-width: 1.9;
+    opacity: 0.7;
+  }
+
+  /* ------------------------------------------------------------------- copy */
+  .lede {
+    margin-block: 2rem 0;
+    font-size: 1.15rem;
+    line-height: 1.7;
+    color: #3f3f46;
+    text-wrap: pretty;
+  }
+
+  /* ----------------------------------------------------------- destinations */
+  .destinations {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-block: 2rem 0;
+    width: 100%;
+  }
+
+  .dest {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    padding: 0.55rem 1rem;
+    border-radius: 10rem;
+    background: #212121;
+    color: #fefefe;
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition:
+      background-color 180ms ease,
+      translate 180ms ease;
+
+    svg {
+      font-size: 1.15em;
+    }
+
+    &:hover {
+      background: #424242;
+      translate: 0 -1px;
+    }
+
+    &:focus-visible {
+      outline: 2px solid #ffa000;
+      outline-offset: 3px;
+    }
+  }
+
+  /* --------------------------------------------------------------- footnote */
+  .footnote {
+    margin-block: 2.5rem 0;
+    font-size: 0.95rem;
+    line-height: 1.75;
+    color: #71717a;
+    text-wrap: pretty;
+
+    /* the icon rides inline with the first line instead of wrapping alone */
+    svg {
+      display: inline-block;
+      vertical-align: -0.14em;
+      font-size: 1.15em;
+      margin-inline-end: 0.15em;
+    }
+
+    a {
+      color: #212121;
+      text-decoration: underline;
+      text-underline-offset: 0.2em;
+    }
+  }
+
+  .back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    margin-block: 2rem 0;
+    padding: 0;
+    border: none;
+    background: none;
+    font-family: "Space Mono", ui-monospace, monospace;
+    font-size: 0.82rem;
+    color: #71717a;
+    cursor: pointer;
+
+    &:hover {
+      color: #212121;
+      text-decoration: underline;
+      text-underline-offset: 0.2em;
+    }
+
+    &[hidden] {
+      display: none;
+    }
+  }
+
+  /* Chips carry one distinct colour each — same palette as the homepage. */
+  .variant-pink {
+    background-color: #fccfe9;
+    color: #141414;
+  }
+
+  .variant-mint {
+    background-color: #5bdaa5;
+    color: #141414;
+  }
+
+  .variant-sky {
+    background-color: #a5d8ff;
+    color: #141414;
+  }
+
+  /* ------------------------------------------------------------ motion-safe */
+  @media (prefers-reduced-motion: no-preference) {
+    .solid {
+      animation: bob 9s ease-in-out infinite;
+    }
+
+    .solid-lavender {
+      animation-duration: 11s;
+      animation-delay: -3s;
+    }
+
+    .solid-lime {
+      animation-duration: 13s;
+      animation-delay: -6s;
+    }
+  }
+
+  @keyframes bob {
+    0%,
+    100% {
+      translate: 0 0;
+    }
+    50% {
+      translate: 0 -14px;
+    }
+  }
+
+  @media (width > 1024px) {
+    main {
+      padding-block: 4rem;
+    }
+
+    .lede {
+      font-size: 1.25rem;
+    }
+  }
+
+  /* Two tidy columns instead of a 3 + 1 wrap on phones. */
+  @media (width < 480px) {
+    .destinations {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .dest {
+      justify-content: center;
+    }
+  }
+
+  /* No side margins left to decorate with on narrow viewports. */
+  @media (width < 900px) {
+    .solid {
+      display: none;
+    }
+  }
+</style>

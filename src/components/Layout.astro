@@ -1,16 +1,34 @@
 ---
 import Navbar from "./Navbar.astro";
 import "../styles/app.css";
+import {
+  SITE,
+  NAME,
+  toJsonLd,
+  personSchema,
+  websiteSchema,
+} from "../lib/schema";
 
 interface Props {
   title?: string;
   description?: string;
+  /** Root-relative path for the canonical URL. Defaults to the current route. */
+  path?: string;
 }
 
 const {
-  title = "Ezekiel — software that works perfectly",
-  description = "I build software that works perfectly and runs seamlessly.",
+  title = `${NAME} — Software Engineer in Lagos`,
+  description = "I build software that works perfectly and runs seamlessly. Go, TypeScript and SvelteKit. Essays on engineering, AI tooling and shipping.",
+  path,
 } = Astro.props;
+
+/** Trailing-slash form, matching `trailingSlash: "always"`. Assets are left alone. */
+const withTrailingSlash = (pathname: string) => {
+  const isFile = /\/[^/]*\.[^/]+$/.test(pathname);
+  return isFile || pathname.endsWith("/") ? pathname : `${pathname}/`;
+};
+
+const canonical = new URL(withTrailingSlash(path ?? Astro.url.pathname), SITE).href;
 ---
 
 <!doctype html>
@@ -19,8 +37,24 @@ const {
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="light" />
-    <meta name="description" content={description} />
     <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    {/* Author + site entities, on every page. Pages extend these by @id. */}
+    <script
+      type="application/ld+json"
+      is:inline
+      set:html={toJsonLd(personSchema)}
+    />
+    <script
+      type="application/ld+json"
+      is:inline
+      set:html={toJsonLd(websiteSchema)}
+    />
+
+    {/* Per-page schema (BlogPosting, BreadcrumbList) */}
+    <slot name="head" />
   </head>
   <body>
     <Navbar></Navbar>

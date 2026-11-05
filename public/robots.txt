@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# Draft essays are filtered out at build time; this is a second guard.
+Disallow: /5-books
+
+Sitemap: https://www.ezekielspace.cc/sitemap-index.xml
