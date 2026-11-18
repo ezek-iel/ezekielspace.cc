@@ -41,6 +41,7 @@ const breadcrumbs = breadcrumbSchema({ title: essay.data.title, path });
   title={`${essay.data.title} — ${NAME}`}
   description={essay.data.description ?? `An essay by ${NAME}: ${essay.data.title}.`}
   path={path}
+  ogImage=`/og/${essay.id}.png`
 >
   <script
     slot="head"

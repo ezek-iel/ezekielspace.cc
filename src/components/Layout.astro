@@ -14,12 +14,14 @@ interface Props {
   description?: string;
   /** Root-relative path for the canonical URL. Defaults to the current route. */
   path?: string;
+  ogImage: string;
 }
 
 const {
   title = `${NAME} — Software Engineer in Lagos`,
   description = "I build software that works perfectly and runs seamlessly. Go, TypeScript and SvelteKit. Essays on engineering, AI tooling and shipping.",
   path,
+  ogImage,
 } = Astro.props;
 
 /** Trailing-slash form, matching `trailingSlash: "always"`. Assets are left alone. */
@@ -28,7 +30,8 @@ const withTrailingSlash = (pathname: string) => {
   return isFile || pathname.endsWith("/") ? pathname : `${pathname}/`;
 };
 
-const canonical = new URL(withTrailingSlash(path ?? Astro.url.pathname), SITE).href;
+const canonical = new URL(withTrailingSlash(path ?? Astro.url.pathname), SITE)
+  .href;
 ---
 
 <!doctype html>
@@ -40,6 +43,19 @@ const canonical = new URL(withTrailingSlash(path ?? Astro.url.pathname), SITE).h
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+
+    <!-- Open Graph meta tags -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage || "/og.png"} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <title>{title}</title>
 
     {/* Author + site entities, on every page. Pages extend these by @id. */}
     <script
@@ -57,7 +73,7 @@ const canonical = new URL(withTrailingSlash(path ?? Astro.url.pathname), SITE).h
     <slot name="head" />
   </head>
   <body>
-    <Navbar></Navbar>
+    <Navbar />
     <slot />
   </body>
 </html>
