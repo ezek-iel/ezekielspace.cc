@@ -3,7 +3,6 @@ title: "Learning C"
 author: "Ezekiel"
 date: 2026-05-18
 tags: ["Technology", "Coding"]
-layout: "../../layouts/postlayout.astro"
 description: "What I cannot create, I do not understand.— Richard Feynman"
 visible: true
 ---

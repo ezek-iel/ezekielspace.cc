@@ -1,0 +1,84 @@
+---
+// Scaffolding only — replace with the real post layout.
+import { getCollection, render } from "astro:content";
+import Layout from "../../components/Layout.astro";
+import {
+  NAME,
+  toJsonLd,
+  blogPostingSchema,
+  breadcrumbSchema,
+} from "../../lib/schema";
+
+import "../../styles/markdown.css";
+
+export async function getStaticPaths() {
+  // `visible: false` drafts must not be built at all — a filtered listing with a
+  // live URL is just an orphan page that still gets indexed.
+  const essays = await getCollection("essays", ({ data }) => data.visible);
+  return essays.map((essay) => ({
+    params: { slug: essay.id },
+    props: { essay },
+  }));
+}
+
+const { essay } = Astro.props;
+const { Content } = await render(essay);
+
+const path = `/essays/${essay.id}/`;
+
+const post = blogPostingSchema({
+  title: essay.data.title,
+  description: essay.data.description,
+  date: essay.data.date,
+  tags: essay.data.tags,
+  path,
+});
+
+const breadcrumbs = breadcrumbSchema({ title: essay.data.title, path });
+---
+
+<Layout
+  title={`${essay.data.title} — ${NAME}`}
+  description={essay.data.description ?? `An essay by ${NAME}: ${essay.data.title}.`}
+  path={path}
+  ogImage=`/og/${essay.id}.png`
+>
+  <script
+    slot="head"
+    type="application/ld+json"
+    is:inline
+    set:html={toJsonLd(post)}
+  />
+  <script
+    slot="head"
+    type="application/ld+json"
+    is:inline
+    set:html={toJsonLd(breadcrumbs)}
+  />
+  <article>
+    <h1 class="title essay-title">{essay.data.title}</h1>
+    <div class="content">
+      <Content />
+    </div>
+  </article>
+</Layout>
+
+<style>
+
+  article {
+    max-width: 768px;
+    margin-inline: auto;
+    margin-block-start: 4rem;
+
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    
+    padding-inline: 1rem;
+  }
+
+  .essay-title {
+    font-size: 3rem;
+    font-weight: 600;
+  }
+</style>

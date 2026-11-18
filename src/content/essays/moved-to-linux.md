@@ -6,7 +6,6 @@ tags:
   - Coding
   - technical
   - Workflows
-layout: ../../layouts/postlayout.astro
 description: Linux is really the best operating system when you begin to use it.
 visible: true
 pinned: true
@@ -37,7 +36,7 @@ Well, it's not their fault, most manufacturers optimize their batteries for wind
 ---
 
 __What about AI Agents, Antigravity, Cursor and Codex? Aren't you leaving them all behind?__  
-First of all? [I don't use desktop harnesses](/essays/ai-workflow), but there are desktop harnesses available for linux[^1].
+First of all? [I don't use desktop harnesses](/essays/ai-workflow/), but there are desktop harnesses available for linux[^1].
 
 ---
 

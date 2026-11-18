@@ -3,7 +3,6 @@ title: "5 Best Books I've ever Read"
 author: "Ezekiel"
 date: 2026-03-10
 tags: ["Personal"]
-layout: "../../layouts/postlayout.astro"
 description: "As a programmer, a christian and a guy getting his life together, I've read a lot of books, finished some and applied few."
 visible: false
 ---

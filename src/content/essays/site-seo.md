@@ -3,7 +3,6 @@ title: "I Googled my Site and Found Nothing"
 author: "Ezekiel"
 date: 2026-08-13
 tags: ["Technology", "AI", "Marketing", "SEO"]
-layout: "../../layouts/postlayout.astro"
 description: "Writing into the void isn't fun"
 visible: true
 ---

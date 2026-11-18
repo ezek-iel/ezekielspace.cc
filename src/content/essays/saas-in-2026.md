@@ -3,7 +3,6 @@ title: "SaaS in 2026"
 author: "Ezekiel"
 date: 2026-03-22
 tags: ["Technology"]
-layout: "../../layouts/postlayout.astro"
 description: "Some things still matter when producing good slop-ware products"
 visible: true
 ---

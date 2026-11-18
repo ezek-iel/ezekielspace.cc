@@ -1,0 +1,79 @@
+---
+import Navbar from "./Navbar.astro";
+import "../styles/app.css";
+import {
+  SITE,
+  NAME,
+  toJsonLd,
+  personSchema,
+  websiteSchema,
+} from "../lib/schema";
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Root-relative path for the canonical URL. Defaults to the current route. */
+  path?: string;
+  ogImage: string;
+}
+
+const {
+  title = `${NAME} — Software Engineer in Lagos`,
+  description = "I build software that works perfectly and runs seamlessly. Go, TypeScript and SvelteKit. Essays on engineering, AI tooling and shipping.",
+  path,
+  ogImage,
+} = Astro.props;
+
+/** Trailing-slash form, matching `trailingSlash: "always"`. Assets are left alone. */
+const withTrailingSlash = (pathname: string) => {
+  const isFile = /\/[^/]*\.[^/]+$/.test(pathname);
+  return isFile || pathname.endsWith("/") ? pathname : `${pathname}/`;
+};
+
+const canonical = new URL(withTrailingSlash(path ?? Astro.url.pathname), SITE)
+  .href;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+
+    <!-- Open Graph meta tags -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage || "/og.png"} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <title>{title}</title>
+
+    {/* Author + site entities, on every page. Pages extend these by @id. */}
+    <script
+      type="application/ld+json"
+      is:inline
+      set:html={toJsonLd(personSchema)}
+    />
+    <script
+      type="application/ld+json"
+      is:inline
+      set:html={toJsonLd(websiteSchema)}
+    />
+
+    {/* Per-page schema (BlogPosting, BreadcrumbList) */}
+    <slot name="head" />
+  </head>
+  <body>
+    <Navbar />
+    <slot />
+  </body>
+</html>

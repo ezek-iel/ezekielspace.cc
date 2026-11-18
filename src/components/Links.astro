@@ -1,0 +1,140 @@
+---
+import { Icon } from "astro-icon/components";
+import meta from "../meta.json";
+
+/** First stack: official sites, so they live in the component. */
+const technologies = [
+    { label: "Go", icon: "devicon:go-wordmark", href: "https://go.dev" },
+    { label: "TypeScript", icon: "devicon:typescript", href: "https://www.typescriptlang.org" },
+    { label: "Svelte", icon: "devicon:svelte", href: "https://svelte.dev" },
+    { label: "Flask", icon: "devicon:flask", href: "https://flask.palletsprojects.com" },
+    { label: "Python", icon: "devicon:python", href: "https://www.python.org" },
+    { label: "PowerShell", icon: "devicon:powershell", href: "https://learn.microsoft.com/powershell/" },
+    { label: "Tailwind CSS", icon: "devicon:tailwindcss", href: "https://tailwindcss.com" },
+    { label: "PocketBase", icon: "devicon:pocketbase", href: "https://pocketbase.io" },
+];
+
+/** Second stack: the URLs come from meta.json, only the icon + name stay here. */
+const SOCIALS: Record<string, { icon: string; label: string }> = {
+    linkedin: { icon: "devicon:linkedin", label: "LinkedIn" },
+    github: { icon: "devicon:github", label: "GitHub" },
+    bluesky: { icon: "logos:bluesky", label: "Bluesky" },
+    youtube: { icon: "logos:youtube-icon", label: "YouTube" },
+};
+
+// Entries still empty in meta.json are skipped, so no icon links to nowhere.
+const socials = Object.entries(meta.socials)
+    .filter(([platform, href]) => href !== "" && platform in SOCIALS)
+    .map(([platform, href]) => ({ href, ...SOCIALS[platform] }));
+---
+
+<div class="box shadow">
+    <div class="first">
+        <p>Technologies</p>
+        <ul class="stack">
+            {
+                technologies.map(({ label, icon, href }) => (
+                    <li>
+                        <a
+                            href={href}
+                            target="_blank"
+                            rel="noopener"
+                            aria-label={`Go to the ${label} website`}
+                        >
+                            <Icon name={icon} />
+                        </a>
+                    </li>
+                ))
+            }
+        </ul>
+    </div>
+
+    <div class="second">
+        <p>Links</p>
+        <ul class="stack">
+            {
+                socials.map(({ label, icon, href }) => (
+                    <li>
+                        <a
+                            href={href}
+                            target="_blank"
+                            rel="noopener"
+                            aria-label={`Visit my ${label} profile`}
+                        >
+                            <Icon name={icon} />
+                        </a>
+                    </li>
+                ))
+            }
+        </ul>
+    </div>
+</div>
+
+<style>
+    .box {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .box > div {
+        padding: 1rem 2rem;
+        p {
+            font-size: 0.75rem;
+            margin-block-end: 0.25rem;
+        }
+    }
+
+    .second {
+        border-top: 1px solid #e0e0e0;    
+        padding-block-start: 0.5rem;
+    }
+    
+    .first {
+        padding-block-end: 0.5rem;
+    }
+
+    .stack {
+        padding-inline-start: 0;
+        margin-block: 0;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        place-items: center;
+
+        row-gap: 1rem;
+        column-gap: 0.25rem;
+
+        a {
+            font-size: 2.5rem;
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+
+            display: flex;
+            align-items: center;
+
+            &:hover {
+                background-color: #e0e0e0;
+                transition: color 0.2s ease;
+            }
+        }
+    }
+
+    @media (width > 1024px) {
+        .box 
+        .stack {
+            width: fit-content;
+        }
+
+        .first > .stack {
+            grid-template-columns: repeat(8, 1fr);
+        }   
+    }
+
+    .shadow {
+        background: #fefefe; /* Or whatever your off-white is */
+        border: 1px solid #e0e0e0;
+        border-radius: 1.5rem;
+        box-shadow:
+            0 4px 20px rgba(0, 0, 0, 0.03),
+            0 1px 3px rgba(0, 0, 0, 0.02);
+    }
+</style>

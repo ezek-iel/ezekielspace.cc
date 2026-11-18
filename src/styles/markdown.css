@@ -1,0 +1,100 @@
+@import "@fontsource/space-mono";
+
+
+div.content {
+
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    padding-block-end: 5rem;
+
+    /* app.css sets font-family on * — code/pre and every token span inside them are elements too,
+       so a direct rule there beats inheritance from <pre>. Restate the stack on the whole subtree. */
+    code, kbd, samp, pre, pre * {
+        font-family: "Space Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    h1, h2, h3, h4 {
+        font-weight: 700;
+    }
+
+    pre {
+        padding: 1rem;
+        border-radius: 0.5rem;
+    }
+
+
+    a {
+        color: #212121;
+    }
+
+
+    p {
+        font-size: 1.15rem;
+        line-height: 2;
+    }
+
+
+    /* app.css removes list styles globally — restore real markdown lists inside prose */
+    ul, ol {
+        font-size: 1.15rem;
+        line-height: 1.5;
+        margin-block: 1em;
+        padding-inline-start: 1.25em;
+    }
+
+    blockquote  {
+        background-color: #FFE0B2;
+        border-inline-start: 4px solid #FF9800;
+        border-bottom-right-radius: 0.5rem;
+        border-top-right-radius: 0.5rem;
+        margin: 0;
+        padding: 0.5rem 1rem;
+    }
+
+    ul {
+        list-style: disc outside;
+    }
+
+    ol {
+        list-style: decimal outside;
+    }
+
+    /* app.css also sets `list-style: none` on li, so the marker has to be re-enabled there */
+    li {
+        list-style: inherit;
+        margin-block: 0.35em;
+    }
+
+    li > ul, li > ol {
+        margin-block: 0.35em;
+    }
+
+    /* nested markers, same shapes GitHub uses */
+    ul ul {
+        list-style-type: circle;
+    }
+
+    ul ul ul {
+        list-style-type: square;
+    }
+
+    ol ol {
+        list-style-type: lower-alpha;
+    }
+
+    ol ol ol {
+        list-style-type: lower-roman;
+    }
+
+    section.footnotes {
+        border-block-start: 1px solid #323232;
+    }
+
+    @media (width > 1024px) {
+        p {
+            font-size: 1.15rem;
+        }        
+    }
+}

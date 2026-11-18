@@ -1,5 +1,20 @@
-# Welcome 👋
+# ezekielspace.cc
 
-![og image](/public/og.png)
+Personal site. Astro, v2 redesign in progress.
 
-**You are free to contribute to this website**
+## Structure
+
+```
+src/
+├── content.config.ts   # essay collection schema
+├── content/essays/     # markdown essays (content only, no layout)
+└── pages/              # minimal scaffolding to be replaced
+```
+
+## Commands
+
+```
+pnpm dev
+pnpm build
+pnpm preview
+```

@@ -4,7 +4,6 @@ author: "Ezekiel"
 date: 2026-02-26
 tags: ["Software", "Future"]
 description: "AI is here to stay. How can we make the best of it as developers?"
-layout: "../../layouts/postlayout.astro"
 visible: true
 ---
 
