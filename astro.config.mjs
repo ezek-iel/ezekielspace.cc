@@ -6,79 +6,38 @@ import sharp from 'sharp';
 import matter from 'gray-matter';
 import icon from 'astro-icon';
 import sitemap from '@astrojs/sitemap';
+import { formatDay } from './src/lib/funcs.ts';
 
-/**
- * Titles are set in Bricolage, which has no pictographs — an emoji would render
- * as a .notdef box, so it is dropped from the card rather than shipped as tofu.
- */
-const cardTitle = (title) =>
-  (title ?? 'Untitled')
-    .replace(/[\p{Extended_Pictographic}\uFE0F\u200D]/gu, '')
-    .replace(/\s+/g, ' ')
-    .trim();
-
-
-const THEMES = [
-  { background: "og-cupcake.png", color: "#FC5383" },
-  { background: "og-fish.png", color: "#FD7305" },
-  { background: "og-rounded-square.png", color: "#43A047" },
-  { background: "og-sphere.png", color: "#0162F1" }
-]
-
-function pickRandom() {
-  return THEMES[Math.floor(Math.random() * THEMES.length)]
-}
-
-/**
- * Generate one Open Graph card per published essay, after the build finishes.
- *
- * Paths are resolved from this file's location rather than `process.cwd()`, so
- * the hook behaves the same however the build is invoked.
- */
 const ogImages = () => ({
   name: 'og-images',
   hooks: {
     'astro:build:done': async ({ dir, logger }) => {
       const resolve = (p) => new URL(p, import.meta.url);
 
-      // The markdown lives in the content collection, NOT in src/pages/essays —
-      // that directory only holds [...slug].astro and would yield zero matches.
       const essaysDir = resolve('./src/content/essays/');
       const outDir = new URL('./og/', dir);
 
-      // satori only parses ttf/otf/woff. Handed woff2 (all that the variable
-      // fontsource package ships) it silently draws .notdef boxes instead of
-      // throwing, so these must be the static .woff faces.
-      const [font700, font400] = await Promise.all([
-        fs.readFile(
-          resolve('./node_modules/@fontsource/bricolage-grotesque/files/bricolage-grotesque-latin-700-normal.woff'),
-        ),
-        fs.readFile(
-          resolve('./node_modules/@fontsource/bricolage-grotesque/files/bricolage-grotesque-latin-400-normal.woff'),
-        ),
+      // 1. Load ONE font weight. 
+      // MUST be .woff, satori silently fails on .woff2
+      const font = await fs.readFile(
+        resolve('./node_modules/@fontsource/bricolage-grotesque/files/bricolage-grotesque-latin-700-normal.woff')
+      );
 
-      ]);
+      // 2. Load your SINGLE background image (Put this in your public folder)
+      // Base64 encode it so satori can use it immediately
+      const bgBuffer = await fs.readFile(resolve('./public/og-bg.png'));
+      const bgUrl = `data:image/png;base64,${bgBuffer.toString('base64')}`;
 
       const essays = (await fs.readdir(essaysDir)).filter((f) => /\.mdx?$/.test(f));
-
-      if (essays.length === 0) {
-        // fail loudly — this is exactly the case that used to pass silently
-        throw new Error(`[og-images] No essays found in ${essaysDir.pathname}`);
-      }
-
       await fs.mkdir(outDir, { recursive: true });
 
-      let generated = 0;
       for (const file of essays) {
-        const theme = pickRandom()
-        const background = await fs.readFile(resolve(`./public/${theme.background}`))
-
-        const backgroundUrl = `data:image/png;base64,${background.toString('base64')}`;
         const { data } = matter(await fs.readFile(new URL(file, essaysDir), 'utf-8'));
 
-        // same rule as getStaticPaths in src/pages/essays/[...slug].astro
+        // Skip hidden essays
         if (data.visible === false) continue;
 
+        // 3. The simplest possible layout
         const svg = await satori(
           {
             type: 'div',
@@ -86,64 +45,55 @@ const ogImages = () => ({
               style: {
                 width: '100%',
                 height: '100%',
-                // satori sizes the box content-box, so without this the root
-                // becomes 1200+2*61 wide and 630+2*55 tall and the bottom of the
-                // card is clipped
-                boxSizing: 'border-box',
                 display: 'flex',
                 flexDirection: 'column',
-                alignItems: 'flex-start',
-                justifyContent: 'flex-start',
-                background: `url(${backgroundUrl})`,
-                backgroundSize: '1200px 630px',
-                backgroundRepeat: 'no-repeat',
-                color: '#141414',
+                justifyContent: 'flex-end', // Align to top
+                alignItems: 'flex-start',     // Align to left
+                padding: '80px',
+                boxSizing: 'border-box',      // Crucial: keeps padding inside the 1200x630 bounds
+                background: `url(${bgUrl})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                color: '#000',
                 fontFamily: 'Bricolage',
-                paddingLeft: '40px',
-                paddingRight: '40px',
-                paddingTop: '55px',
-                paddingBottom: '72px',
               },
               children: [
                 {
-                  type: 'div',
+                  type: 'h1',
                   props: {
-                    // the character sits in the right third of the background,
-                    // so the copy is capped to the whitespace beside it
                     style: {
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'flex-start',
-                      width: '620px',
-                      gap: '10px',
+                      fontSize: '80px',
+                      fontWeight: 700,
+                      lineHeight: 1.1,
+                      margin: 0,
                     },
-                    children: [
-                      {
-                        type: 'h1',
-                        props: {
-                          style: {
-                            fontSize: '84px',
-                            fontWeight: 700,
-                            lineHeight: 1.05,
-                            letterSpacing: '-0.02em',
-                            color: theme.color
-                          },
-                          children: cardTitle(data.title),
-                        },
-                      },
-                      {
-                        type: 'h3',
-                        props: {
-                          style: {
-                            fontSize: '42px',
-                            fontWeight: 400,
-                            lineHeight: 1.2,
-                            color: '#52525b',
-                          },
-                          children: 'by Ezekiel',
-                        },
-                      },
-                    ],
+                    children: data.title || 'Untitled',
+                  },
+                },
+                {
+                  type: 'h3',
+                  props: {
+                    style: {
+                      fontSize: '40px',
+                      fontWeight: 400, // Change to 700 if you only load the bold font
+                      marginTop: '20px',
+                      marginBottom: 0,
+                      color: '#52525b', // Slightly lighter gray
+                    },
+                    children: 'by Ezekiel',
+                  },
+                },
+                {
+                  type: 'h5',
+                  props: {
+                    style: {
+                      fontSize: '24px',
+                      fontWeight: 400,
+                      marginTop: '10px',
+                      marginBottom: 0,
+                      color: '#a1a1aa', // Even lighter gray for the date
+                    },
+                    children: formatDay(new Date(data.date)) || '', // Assuming 'date' is in your frontmatter
                   },
                 },
               ],
@@ -153,35 +103,28 @@ const ogImages = () => ({
             width: 1200,
             height: 630,
             fonts: [
-              { name: 'Bricolage', data: font400, weight: 400, style: 'normal' },
-              { name: 'Bricolage', data: font700, weight: 700, style: 'normal' },
+              { name: 'Bricolage', data: font, weight: 700, style: 'normal' }
             ],
-          },
+          }
         );
+
+        logger.info(`✅ Generated image for ${data.title}`)
 
         const png = await sharp(Buffer.from(svg)).png().toBuffer();
         await fs.writeFile(new URL(`${file.replace(/\.mdx?$/, '')}.png`, outDir), png);
-        generated += 1;
       }
 
-      logger.info(`generated ${generated} OG image(s) in /og/`);
+      logger.info(`Generated OG images in /og/`);
     },
   },
 });
 
-// https://docs.astro.build/en/reference/configuration-reference/
 export default defineConfig({
   site: 'https://www.ezekielspace.cc',
-  // Canonical URLs end in a slash, which is what `build.format: "directory"` emits.
-  // Keeps canonical, internal links and the sitemap on one form.
   trailingSlash: 'always',
   integrations: [
     icon(),
-    sitemap({
-      // Drafts are already filtered out of `getStaticPaths`; this is a second guard
-      // so an unpublished essay can never reach the sitemap.
-      filter: (page) => !page.includes("/5-books"),
-    }),
+    sitemap(),
     ogImages(),
   ],
 });

@@ -8,6 +8,7 @@ import {
   blogPostingSchema,
   breadcrumbSchema,
 } from "../../lib/schema";
+import {formatDay} from "../../lib/funcs";
 
 import "../../styles/markdown.css";
 
@@ -35,11 +36,14 @@ const post = blogPostingSchema({
 });
 
 const breadcrumbs = breadcrumbSchema({ title: essay.data.title, path });
+
 ---
 
 <Layout
   title={`${essay.data.title} — ${NAME}`}
-  description={essay.data.description ?? `An essay by ${NAME}: ${essay.data.title}.`}
+  description={
+    essay.data.description ?? `An essay by ${NAME}: ${essay.data.title}.`
+  }
   path={path}
   ogImage=`/og/${essay.id}.png`
 >
@@ -55,30 +59,88 @@ const breadcrumbs = breadcrumbSchema({ title: essay.data.title, path });
     is:inline
     set:html={toJsonLd(breadcrumbs)}
   />
-  <article>
-    <h1 class="title essay-title">{essay.data.title}</h1>
-    <div class="content">
-      <Content />
+  <div class="container">
+    <div class="top grid">
+      <div class="inner">
+        <h1 class="title essay-title">{essay.data.title}</h1>
+        <p class="date">{formatDay(new Date(essay.data.date))}</p>
+        <ul class="tags">
+          {essay.data.tags.map((tag) => (
+            <li class="tag">{tag}</li>
+          ))}
+        </ul>
+      </div>
     </div>
-  </article>
+    <article>
+      <div class="content">
+        <Content />
+      </div>
+    </article>
+  </div>
 </Layout>
 
 <style>
-
   article {
     max-width: 768px;
     margin-inline: auto;
-    margin-block-start: 4rem;
 
     display: flex;
     flex-direction: column;
     gap: 2rem;
-    
+
     padding-inline: 1rem;
+  }
+
+  .tags {
+    padding-inline: 0;
+    display: inline-flex;
+    gap: 0.75rem;
+  }
+
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5em 1.75em;
+    border-radius: 9999px;
+
+    font-size: 0.8125rem;
+    font-weight: 500;
+    white-space: nowrap;
+
+    background-color: #18181b;
+    border-color: #212121;
+    color: #fafafa;
+
+    /* 4. A subtle shadow to lift it off the grid */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+
+  .container {
+    margin-block-start: 4rem;
   }
 
   .essay-title {
     font-size: 3rem;
     font-weight: 600;
+  }
+
+  .top {
+    padding-block: 3rem;
+    margin-bottom: 2rem;
+
+    padding-inline: 1rem;
+  }
+
+  .inner {
+    max-width: 768px;
+    margin-inline: auto;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .date {
+    font-size: 1.5rem;
   }
 </style>

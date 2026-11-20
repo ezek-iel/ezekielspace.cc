@@ -1,10 +1,11 @@
 {
-  "cv-link": "/cv.pdf",
+  "cv-link": "https://drive.google.com/file/d/1dpDawUCLSqWh-f4oAZ0FnnX7DkDD5y5w/view?usp=drivesdk",
   "currentlyWorkingOn": "Improving my Writing Skills",
   "socials": {
-    "linkedin": "",
+    "linkedin": "https://www.linkedin.com/in/akinfenwa-ezekiel",
     "github": "https://github.com/ezek-iel",
-    "bluesky": "",
-    "youtube": ""
+    "bluesky": "https://bsky.app/profile/ezekielspace.cc",
+    "youtube": "https://youtube.com/@square-spheres",
+    "email": "ezekielakinfenwa98@gmail.com"
   }
 }
