@@ -2,21 +2,26 @@
 import { getCollection } from "astro:content";
 import Layout from "../components/Layout.astro";
 
-const publishedEssays = await getCollection("essays", ({ data }) => data.visible);
+const publishedEssays = await getCollection(
+    "essays",
+    ({ data }) => data.visible,
+);
 
 const newestFirst = (a, b) => b.data.date.valueOf() - a.data.date.valueOf();
 
 /** Group visible essays by year: `Map<year, essays[]>` in reverse-chronological order. */
-const essaysByYear = publishedEssays.sort(newestFirst).reduce((groups, essay) => {
-    const year = essay.data.date.getFullYear();
+const essaysByYear = publishedEssays
+    .sort(newestFirst)
+    .reduce((groups, essay) => {
+        const year = essay.data.date.getFullYear();
 
-    if (!groups.has(year)) {
-        groups.set(year, []);
-    }
-    groups.get(year).push(essay);
+        if (!groups.has(year)) {
+            groups.set(year, []);
+        }
+        groups.get(year).push(essay);
 
-    return groups;
-}, new Map());
+        return groups;
+    }, new Map());
 
 /** "Dec 20" — the year is already shown by the group heading. */
 const formatDay = (date) =>
@@ -26,51 +31,48 @@ const formatDay = (date) =>
 <Layout
     title="Essays — Ezekiel Akinfenwa"
     description="Essays on software engineering, AI tooling, learning in public and building things for the fun of it."
+    ogImage=""
 >
     <div class="container">
-        <div>
-            <h1 class="title heading">Essays</h1>
-            <p class="comment">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Doloremque itaque fuga cupiditate deleniti explicabo deserunt.
-                Mollitia neque laborum repellat commodi?
-            </p>
+        <div class="top grid">
+            <div class="inner">
+                <h1 class="title heading">Essays</h1>
+            </div>
         </div>
 
         <div class="archive">
-            {
-                [...essaysByYear].map(([year, essays]) => (
-                    <section class="year-group">
-                        <h2 class="year">{year}</h2>
-                        <ul class="essay-list">
-                            {essays.map((essay) => (
-                                <li class="essay">
-                                    <a class="essay-link" href={`/essays/${essay.id}/`}>
-                                        <h3 class="title essay-title">{essay.data.title}</h3>
-                                        <time
-                                            class="essay-date"
-                                            datetime={essay.data.date.toISOString()}
-                                        >
-                                            {formatDay(essay.data.date)}
-                                        </time>
-                                    </a>
-                                </li>
-                            ))}
-                        </ul>
-                    </section>
-                ))
-            }
+            {[...essaysByYear].map(([year, essays]) => (
+                <section class="year-group">
+                    <h2 class="year">{year}</h2>
+                    <ul class="essay-list">
+                        {essays.map((essay) => (
+                            <li class="essay">
+                                <a
+                                    class="essay-link"
+                                    href={`/essays/${essay.id}/`}
+                                >
+                                    <h3 class="title essay-title">
+                                        {essay.data.title}
+                                    </h3>
+                                    <time
+                                        class="essay-date"
+                                        datetime={essay.data.date.toISOString()}
+                                    >
+                                        {formatDay(essay.data.date)}
+                                    </time>
+                                </a>
+                            </li>
+                        ))}
+                    </ul>
+                </section>
+            ))}
         </div>
     </div>
 </Layout>
 
 <style>
     .container {
-        max-width: 768px;
-        padding-block-start: 1rem;
-        margin-inline: auto;
-
-        padding-inline: 1rem;
+        padding-block-start: 2rem;
     }
 
     .heading {
@@ -80,6 +82,11 @@ const formatDay = (date) =>
         @media (width > 1024px) {
             font-size: 3rem;
         }
+    }
+
+    .inner {
+        max-width: 768px;
+        margin-inline: auto;
     }
 
     .comment {
@@ -92,7 +99,12 @@ const formatDay = (date) =>
     }
 
     .archive {
+        margin-inline: auto;
+        max-width: 768px;
+
         margin-block-start: 2.5rem;
+        padding-inline-start: 2rem;
+        padding-block-end: 4rem;
     }
 
     .year-group + .year-group {
@@ -148,4 +160,14 @@ const formatDay = (date) =>
         font-size: 1rem;
         color: #71717a;
     }
+
+    .top {
+        padding-block: 2rem;
+        padding-inline-start: 1.5rem;   
+        
+        @media (width > 1024px) {
+            padding-block: 4rem;
+        }     
+    }
+
 </style>

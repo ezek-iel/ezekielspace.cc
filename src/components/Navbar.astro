@@ -1,107 +1,138 @@
 ---
 import { Icon } from "astro-icon/components";
 import meta from "../meta.json";
+
+const currentPath = Astro.url.pathname;
 ---
 
 <nav class="navbar">
-    <a href="/" class="home-button"><Icon name="tabler:home"/></a>
-    <ul class="links">
-        <li>
-            <Icon name="tabler:pencil-bolt" />Essays
-            <a href="/essays/"></a>
-        </li>
-        <li>
-            <Icon name="tabler:mood-smile" />About
-            <a href="/about/"></a>
-        </li>
-        <li>
-            <Icon name="tabler:robot-off" />AI
-            <a href="/ai/"></a>
-        </li>
-        <li>
-            <Icon name="tabler:file-cv" />CV
-            <a href={meta["cv-link"]}></a>
-        </li>
-    </ul>
+    <a href="/" class="home-button" aria-label="Home">
+        <Icon name="tabler:home" />
+    </a>
+
+    <!-- Added a wrapper for the pill background -->
+    <div class="links-wrapper">
+        <ul class="links">
+            <li>
+                <!-- Move the <a> to wrap the content -->
+                <a
+                    href="/essays/"
+                    class:list={[{ active: currentPath.startsWith("/essays") }]}
+                >
+                    <Icon name="tabler:pencil-bolt" />
+                    <span>Essays</span>
+                </a>
+            </li>
+            <li>
+                <a
+                    href="/ai/"
+                    class:list={[{ active: currentPath.startsWith("/ai") }]}
+                >
+                    {" "}
+                    <!-- Add 'active' class dynamically if needed -->
+                    <Icon name="tabler:robot-off" />
+                    <span>AI</span>
+                </a>
+            </li>
+            <li>
+                <a
+                    href={meta["cv-link"]}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    <Icon name="tabler:file-cv" />
+                    <span>CV</span>
+                </a>
+            </li>
+        </ul>
+    </div>
 </nav>
 
 <style>
     .navbar {
-        position: relative;
-        z-index: 1;
-        padding-block: 0.25rem;
-        margin-block-start: 0.5rem;
-        padding-inline: 1.5rem;
         display: flex;
-        gap: 0.5rem;
         align-items: center;
         justify-content: center;
-        flex-wrap: wrap;
-    }
-
-    .links {
-        background-color: #eeeeee;
-        border: 1px solid #e0e0e0;
-        color: #424242;
-        /* fluid: full desktop size on large screens, legible on phones */
-        font-size: 1rem;
-        padding-block: 0.223em;
-        padding-inline: 0.665em;
-        border-radius: 10rem;
-        display: flex;
-        gap: 0.11em;
-        max-width: 100%;
-    }
-
-    .links li {
-        padding-block: 0.445em;
-        padding-inline: 0.89em;
-        
-        display: flex;
-        gap: 0.445em;
-        align-items: center;
-
-        border-radius: 10rem;
-        position: relative;
-        white-space: nowrap;
-
-        &:hover {
-            background-color: #E0E0E0;
-            transition: color 0.2s ease;
-        }
-       
-        a {
-            position: absolute;
-            inset: 0;
-            border-radius: 10rem;
-        }
+        gap: 0.5rem; /* Space between home button and links */
+        padding: 1.5rem 1rem;
     }
 
     .home-button {
-        background-color: #212121;
-        display: inline-flex;
+        display: flex;
         align-items: center;
-        padding: 0.75rem;
-        border-radius: 50rem;
-        color: #FEFEFE;
-        font-size: 1.25rem;
+        justify-content: center;
+        width: 2.5rem;
+        height: 2.5rem;
+        background-color: #111;
+        color: #fff;
+        border-radius: 50%;
+        transition: background-color 0.2s ease;
+    }
 
-        &:hover {
-            background-color: #424242;
-            transition: color 200ms ease;
+    .home-button:hover {
+        background-color: #333;
+    }
+
+    /* The pill container */
+    .links-wrapper {
+        background-color: #f4f4f5; /* Slightly more modern gray */
+        border: 1px solid #e4e4e7;
+        padding: 0.25rem; /* Inner padding to create the "track" effect */
+        border-radius: 2rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); /* Subtle lift */
+    }
+
+    .links {
+        display: flex;
+        gap: 0.25rem; /* Space between individual links */
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* The actual clickable links */
+    .links {
+        /* ... */
+        a {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.35rem 0.85rem;
+            border-radius: 10rem;
+            color: #424242;
+            font-size: 0.95rem;
+            text-decoration: none;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+
+            /* Hover state */
+            &:hover {
+                background-color: #e8e8e8;
+            }
+
+            /* The Current Link Marker */
+            &.active {
+                background-color: #e0e0e0; /* Slightly darker gray */
+                color: #111; /* Darker text */
+                font-weight: 500; /* Optional: make it slightly bolder */
+            }
         }
     }
 
-    /* icons are decorative — drop them before the labels have to shrink */
+    /* Keep icons perfectly sized so they don't mess up the line-height */
+    .links a :global(svg) {
+        width: 1rem;
+        height: 1rem;
+        opacity: 0.7;
+    }
+
+    /* Mobile responsive */
     @media (max-width: 26rem) {
-        .links li > svg {
+        .links a :global(svg) {
             display: none;
         }
-    }
-
-    @media (width > 1024px) {
-        .links {
-            font-size: 1rem;
+        .links a {
+            padding: 0.5rem 0.75rem;
         }
     }
 </style>

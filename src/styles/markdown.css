@@ -90,6 +90,7 @@ div.content {
 
     section.footnotes {
         border-block-start: 1px solid #323232;
+        padding-block-start: 1.5rem;
     }
 
     @media (width > 1024px) {
@@ -97,4 +98,5 @@ div.content {
             font-size: 1.15rem;
         }        
     }
+
 }
