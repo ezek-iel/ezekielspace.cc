@@ -23,6 +23,9 @@ importers:
       '@iconify-json/logos':
         specifier: ^1.2.18
         version: 1.2.18
+      '@iconify-json/tabler':
+        specifier: ^1.2.46
+        version: 1.2.46
       astro:
         specifier: 7.4.4
         version: 7.4.4(@types/node@24.13.3)(esbuild@0.27.3)(yaml@2.9.1)
@@ -45,9 +48,6 @@ importers:
       '@fontsource/bricolage-grotesque':
         specifier: ^5.3.0
         version: 5.3.0
-      '@iconify-json/tabler':
-        specifier: ^1.2.43
-        version: 1.2.43
       '@types/matter-js':
         specifier: ^0.20.2
         version: 0.20.2
@@ -427,8 +427,8 @@ packages:
   '@iconify-json/logos@1.2.18':
     resolution: {integrity: sha512-Qehd7RmUbYM4LSXNHFqulgvmdmqldOxQ3VDbCmzos5IGlo40+cChVdX7GnG9VODBU0H3+Bb8npYOkplooJZvtQ==}
 
-  '@iconify-json/tabler@1.2.43':
-    resolution: {integrity: sha512-EKhyOj6nASi25ZjuRpEhPL1fwiKVtg/e/VX6v6X3FPKpjG9og26ypW8ItnWYSTn6fdNuQe3VPeyuThWlP6QuWw==}
+  '@iconify-json/tabler@1.2.46':
+    resolution: {integrity: sha512-iyEZEUhHV4x1ZbNzzjk3i6Z+MH5h5nXipqKaH7+bUlnoQwzn7fNjWRSqwWtwQ4PYN6WM+N/fLQC/48TRto26qQ==}
 
   '@iconify/tools@5.0.14':
     resolution: {integrity: sha512-wJ4ZE3/HZh2iBqLwG+8FOMHe7CMJAJqwSXZSpPwMdj1gZM3Z4t2hbQMVw4Vm45oQ985qn0g89PUIcDEdKTheBA==}
@@ -2036,7 +2036,7 @@ snapshots:
     dependencies:
       '@iconify/types': 2.0.0
 
-  '@iconify-json/tabler@1.2.43':
+  '@iconify-json/tabler@1.2.46':
     dependencies:
       '@iconify/types': 2.0.0
 

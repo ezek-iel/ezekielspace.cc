@@ -1,138 +1,63 @@
 ---
 import { Icon } from "astro-icon/components";
 import meta from "../meta.json";
-
-const currentPath = Astro.url.pathname;
 ---
 
-<nav class="navbar">
-    <a href="/" class="home-button" aria-label="Home">
-        <Icon name="tabler:home" />
-    </a>
-
-    <!-- Added a wrapper for the pill background -->
-    <div class="links-wrapper">
-        <ul class="links">
-            <li>
-                <!-- Move the <a> to wrap the content -->
-                <a
-                    href="/essays/"
-                    class:list={[{ active: currentPath.startsWith("/essays") }]}
-                >
-                    <Icon name="tabler:pencil-bolt" />
-                    <span>Essays</span>
-                </a>
-            </li>
-            <li>
-                <a
-                    href="/ai/"
-                    class:list={[{ active: currentPath.startsWith("/ai") }]}
-                >
-                    {" "}
-                    <!-- Add 'active' class dynamically if needed -->
-                    <Icon name="tabler:robot-off" />
-                    <span>AI</span>
-                </a>
-            </li>
-            <li>
-                <a
-                    href={meta["cv-link"]}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    <Icon name="tabler:file-cv" />
-                    <span>CV</span>
-                </a>
-            </li>
-        </ul>
-    </div>
+<nav>
+    <ul class="navlist">
+        <li>
+            <a href="/">
+                <Icon name="tabler:home" />
+                Home
+            </a>
+        </li>
+        <li>
+            <a href="/ai/">
+                <Icon name="tabler:robot-off" />
+                AI
+            </a>
+        </li>
+        <li>
+            <a href="/essays/">
+                <Icon name="tabler:pencil-bolt" />
+                Essays
+            </a>
+        </li>
+        <li>
+            <a href={meta["cv-link"]}>
+                <Icon name="tabler:file-cv" />
+                CV
+            </a>
+        </li>
+    </ul>
 </nav>
 
 <style>
-    .navbar {
+    nav {
+        padding-inline: 1.5rem;
+        padding-block: 2rem;
+    }
+
+    .navlist {
         display: flex;
-        align-items: center;
+        gap: 2rem;
         justify-content: center;
-        gap: 0.5rem; /* Space between home button and links */
-        padding: 1.5rem 1rem;
-    }
 
-    .home-button {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 2.5rem;
-        height: 2.5rem;
-        background-color: #111;
-        color: #fff;
-        border-radius: 50%;
-        transition: background-color 0.2s ease;
-    }
+        font-size: 1.25rem;
 
-    .home-button:hover {
-        background-color: #333;
-    }
-
-    /* The pill container */
-    .links-wrapper {
-        background-color: #f4f4f5; /* Slightly more modern gray */
-        border: 1px solid #e4e4e7;
-        padding: 0.25rem; /* Inner padding to create the "track" effect */
-        border-radius: 2rem;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); /* Subtle lift */
-    }
-
-    .links {
-        display: flex;
-        gap: 0.25rem; /* Space between individual links */
-        list-style: none;
-        margin: 0;
-        padding: 0;
-    }
-
-    /* The actual clickable links */
-    .links {
-        /* ... */
-        a {
-            display: flex;
+        li > a {
+            display: inline-flex;
             align-items: center;
-            gap: 0.4rem;
-            padding: 0.35rem 0.85rem;
-            border-radius: 10rem;
-            color: #424242;
-            font-size: 0.95rem;
-            text-decoration: none;
-            white-space: nowrap;
-            transition: all 0.2s ease;
+            gap: 0.25rem;
+        }
 
-            /* Hover state */
+        li {
+            padding: 0.25rem 0.5rem;
+
             &:hover {
-                background-color: #e8e8e8;
+                background-color: #dedede;
+                transition: color 2s ease-in-out;
             }
-
-            /* The Current Link Marker */
-            &.active {
-                background-color: #e0e0e0; /* Slightly darker gray */
-                color: #111; /* Darker text */
-                font-weight: 500; /* Optional: make it slightly bolder */
-            }
-        }
-    }
-
-    /* Keep icons perfectly sized so they don't mess up the line-height */
-    .links a :global(svg) {
-        width: 1rem;
-        height: 1rem;
-        opacity: 0.7;
-    }
-
-    /* Mobile responsive */
-    @media (max-width: 26rem) {
-        .links a :global(svg) {
-            display: none;
-        }
-        .links a {
-            padding: 0.5rem 0.75rem;
         }
     }
 </style>
